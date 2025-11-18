@@ -1,0 +1,302 @@
+{
+  "info": {
+    "name": "Waste Management API - Student 22201213",
+    "description": "Complete API collection for Module 2 REST APIs with simple test IDs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:1213",
+      "type": "string"
+    },
+    {
+      "key": "admin_id",
+      "value": "000000000000000000000001",
+      "type": "string"
+    },
+    {
+      "key": "company_abc_id",
+      "value": "000000000000000000000002",
+      "type": "string"
+    },
+    {
+      "key": "green_industries_id",
+      "value": "000000000000000000000003",
+      "type": "string"
+    },
+    {
+      "key": "regular_user_id",
+      "value": "000000000000000000000004",
+      "type": "string"
+    },
+    {
+      "key": "plastic_auction_id",
+      "value": "000000000000000000000101",
+      "type": "string"
+    },
+    {
+      "key": "glass_auction_id",
+      "value": "000000000000000000000102",
+      "type": "string"
+    },
+    {
+      "key": "paper_auction_id",
+      "value": "000000000000000000000103",
+      "type": "string"
+    },
+    {
+      "key": "plastic_req_id",
+      "value": "000000000000000000000301",
+      "type": "string"
+    },
+    {
+      "key": "notification_id",
+      "value": "000000000000000000000401",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": ["{{base_url}}"],
+          "path": [""]
+        },
+        "description": "Check if server is running and get basic info"
+      }
+    },
+    {
+      "name": "Module 2 - Member 2: Auction Participation",
+      "item": [
+        {
+          "name": "1. GET All Auctions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auctions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auctions"]
+            },
+            "description": "Retrieve all available auctions"
+          }
+        },
+        {
+          "name": "2. GET Single Auction",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auctions/{{plastic_auction_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auctions", "{{plastic_auction_id}}"]
+            },
+            "description": "Get details of a specific auction (Plastic Bottles)"
+          }
+        },
+        {
+          "name": "3. Check Eligibility",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{company_abc_id}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auctions/{{plastic_auction_id}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auctions", "{{plastic_auction_id}}", "check-eligibility"]
+            },
+            "description": "Check if Company ABC is eligible to bid on plastic auction"
+          }
+        },
+        {
+          "name": "4. Place Bid",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidderId\": \"{{company_abc_id}}\",\n  \"bidAmount\": 1500,\n  \"bidType\": \"cash\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auctions/{{plastic_auction_id}}/bid",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auctions", "{{plastic_auction_id}}", "bid"]
+            },
+            "description": "Place a bid of 1500 on plastic auction"
+          }
+        },
+        {
+          "name": "5. GET Auction Bids",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auctions/{{plastic_auction_id}}/bids",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auctions", "{{plastic_auction_id}}", "bids"]
+            },
+            "description": "View all bids placed on plastic auction"
+          }
+        },
+        {
+          "name": "6. GET User Bid History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{company_abc_id}}/bids",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{company_abc_id}}", "bids"]
+            },
+            "description": "View all bids made by Company ABC"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 2 - Member 3: Material Requirements",
+      "item": [
+        {
+          "name": "7. Create Material Requirement",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"companyId\": \"{{company_abc_id}}\",\n  \"materialType\": \"organic\",\n  \"quantity\": 500,\n  \"unit\": \"kg\",\n  \"description\": \"Need organic waste for composting facility\",\n  \"maxPrice\": 2000,\n  \"urgency\": \"medium\",\n  \"status\": \"active\",\n  \"preferredLocations\": [\"Dhaka\", \"Chittagong\"],\n  \"notificationPreferences\": {\n    \"auctionMatch\": true,\n    \"inventoryMatch\": true,\n    \"priceAlert\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements"]
+            },
+            "description": "Create a new material requirement for organic waste"
+          }
+        },
+        {
+          "name": "8. GET All Requirements",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements"]
+            },
+            "description": "Retrieve all material requirements"
+          }
+        },
+        {
+          "name": "9. GET Single Requirement",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements/{{plastic_req_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements", "{{plastic_req_id}}"]
+            },
+            "description": "Get details of plastic requirement"
+          }
+        },
+        {
+          "name": "10. Update Requirement",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 1500,\n  \"maxPrice\": 6000,\n  \"urgency\": \"high\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements/{{plastic_req_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements", "{{plastic_req_id}}"]
+            },
+            "description": "Update plastic requirement with new quantity and price"
+          }
+        },
+        {
+          "name": "11. Find Matching Auctions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements/{{plastic_req_id}}/matches",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements", "{{plastic_req_id}}", "matches"]
+            },
+            "description": "Find auctions matching plastic requirement"
+          }
+        },
+        {
+          "name": "12. GET Company Notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/companies/{{company_abc_id}}/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "companies", "{{company_abc_id}}", "notifications"]
+            },
+            "description": "View all notifications for Company ABC"
+          }
+        },
+        {
+          "name": "13. Mark Notification Read",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/{{notification_id}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "{{notification_id}}", "read"]
+            },
+            "description": "Mark a notification as read"
+          }
+        },
+        {
+          "name": "14. Delete Requirement (Bonus)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/material-requirements/{{plastic_req_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "material-requirements", "{{plastic_req_id}}"]
+            },
+            "description": "Delete/cancel a material requirement"
+          }
+        }
+      ]
+    }
+  ]
+}
