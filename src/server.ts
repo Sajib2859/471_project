@@ -4,12 +4,14 @@ import dotenv from 'dotenv';
 import connectDB from './config/database';
 import auctionRoutes from './routes/auctionRoutes';
 import materialRequirementRoutes from './routes/materialRequirementRoutes';
+import wasteHubRoutes from './routes/wasteHubRoutes';
+import creditRoutes from './routes/creditRoutes';
 
 // Load environment variables
 dotenv.config();
 
 const app: Application = express();
-const PORT = parseInt(process.env.PORT || '1213', 10);
+const PORT = parseInt(process.env.PORT || '9371', 10);
 
 // Middleware
 app.use(cors());
@@ -27,9 +29,11 @@ app.get('/', (req: Request, res: Response) => {
   res.json({
     success: true,
     message: 'Waste Management API Server',
-    studentId: '22201213',
+    studentId: '22299371',
     port: PORT,
     endpoints: {
+      wasteHubs: '/api/waste-hubs',
+      credits: '/api/users/:userId/credits',
       auctions: '/api/auctions',
       materialRequirements: '/api/material-requirements',
       documentation: '/api/docs'
@@ -38,6 +42,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // API Routes
+app.use('/api', wasteHubRoutes);
+app.use('/api', creditRoutes);
 app.use('/api', auctionRoutes);
 app.use('/api', materialRequirementRoutes);
 
@@ -45,9 +51,33 @@ app.use('/api', materialRequirementRoutes);
 app.get('/api/docs', (req: Request, res: Response) => {
   res.json({
     success: true,
-    studentId: '22201213',
-    module: 'Module 2: Credit, Auctions, & Marketplace',
+    studentId: '22299371',
+    modules: 'Module 1 & Module 2',
     features: [
+      {
+        feature: 'Module 1 - Member 1',
+        description: 'Find and filter waste disposal hubs by location and waste type',
+        endpoints: [
+          'GET /api/waste-hubs - View all waste hubs',
+          'GET /api/waste-hubs/:id - View single waste hub',
+          'GET /api/waste-hubs/nearby - Find nearby waste hubs',
+          'GET /api/waste-hubs/filter-by-waste-type/:wasteType - Filter by waste type',
+          'GET /api/waste-hubs/status/:status - Get hubs by status',
+          'GET /api/waste-hubs/:id/accepted-materials - Get accepted materials'
+        ]
+      },
+      {
+        feature: 'Module 2 - Member 1',
+        description: 'View credit balance, transaction history, and redeem credits for cash',
+        endpoints: [
+          'GET /api/users/:userId/credits/balance - View credit balance',
+          'GET /api/users/:userId/credits/transactions - View transaction history',
+          'POST /api/users/:userId/credits/redeem - Redeem credits for cash',
+          'GET /api/users/:userId/credits/redemptions - View redemption history',
+          'GET /api/users/:userId/credits/redemptions/:redemptionId - Get redemption details',
+          'GET /api/credits/summary - Get credit statistics'
+        ]
+      },
       {
         feature: 'Module 2 - Member 2',
         description: 'Users and companies can participate in live online auctions',
@@ -109,7 +139,7 @@ const startServer = async () => {
       console.log('🚀 Waste Management API Server Started');
       console.log('═══════════════════════════════════════════════════');
       console.log(`📍 Server running on: http://localhost:${PORT}`);
-      console.log(`👤 Student ID: 22201213`);
+      console.log(`👤 Student ID: 22299371`);
       console.log(`📝 API Documentation: http://localhost:${PORT}/api/docs`);
       console.log(`🌐 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log('═══════════════════════════════════════════════════');

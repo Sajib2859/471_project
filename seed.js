@@ -96,12 +96,78 @@ const NotificationSchema = new mongoose.Schema({
   createdAt: Date
 });
 
+const WasteHubSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  name: String,
+  location: {
+    address: String,
+    city: String,
+    coordinates: {
+      latitude: Number,
+      longitude: Number
+    }
+  },
+  wasteTypes: [String],
+  status: String,
+  operatingHours: {
+    open: String,
+    close: String
+  },
+  acceptedMaterials: [{
+    type: { type: String },
+    pricePerKg: Number
+  }],
+  capacity: {
+    current: Number,
+    maximum: Number
+  },
+  contactNumber: String,
+  createdAt: Date,
+  updatedAt: Date
+});
+
+const CreditTransactionSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  userId: mongoose.Schema.Types.ObjectId,
+  type: String,
+  amount: Number,
+  description: String,
+  referenceId: mongoose.Schema.Types.ObjectId,
+  referenceType: String,
+  balanceAfter: Number,
+  createdAt: Date
+});
+
+const CreditRedemptionSchema = new mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  userId: mongoose.Schema.Types.ObjectId,
+  creditsRedeemed: Number,
+  cashAmount: Number,
+  conversionRate: Number,
+  status: String,
+  paymentMethod: String,
+  paymentDetails: {
+    accountNumber: String,
+    accountName: String,
+    bankName: String,
+    mobileNumber: String
+  },
+  processedBy: mongoose.Schema.Types.ObjectId,
+  processedAt: Date,
+  rejectionReason: String,
+  createdAt: Date,
+  updatedAt: Date
+});
+
 // Models
 const User = mongoose.model('User', UserSchema);
 const Auction = mongoose.model('Auction', AuctionSchema);
 const Bid = mongoose.model('Bid', BidSchema);
 const MaterialRequirement = mongoose.model('MaterialRequirement', MaterialRequirementSchema);
 const Notification = mongoose.model('Notification', NotificationSchema);
+const WasteHub = mongoose.model('WasteHub', WasteHubSchema);
+const CreditTransaction = mongoose.model('CreditTransaction', CreditTransactionSchema);
+const CreditRedemption = mongoose.model('CreditRedemption', CreditRedemptionSchema);
 
 // Seed Function
 const seedDatabase = async () => {
@@ -113,6 +179,9 @@ const seedDatabase = async () => {
     await Bid.deleteMany({});
     await MaterialRequirement.deleteMany({});
     await Notification.deleteMany({});
+    await WasteHub.deleteMany({});
+    await CreditTransaction.deleteMany({});
+    await CreditRedemption.deleteMany({});
     console.log('✅ Existing data cleared\n');
 
     // Insert Users
@@ -459,12 +528,249 @@ const seedDatabase = async () => {
     ]);
     console.log('✅ 5 notifications inserted\n');
 
+    // Insert Waste Hubs
+    console.log('🏭 Inserting waste hubs...');
+    const hubs = await WasteHub.insertMany([
+      {
+        _id: createSimpleId(501),
+        name: "Dhaka Central Waste Hub",
+        location: {
+          address: "123 Green Road, Dhanmondi",
+          city: "Dhaka",
+          coordinates: { latitude: 23.7461, longitude: 90.3742 }
+        },
+        wasteTypes: ["plastic", "paper", "metal", "glass"],
+        status: "open",
+        operatingHours: { open: "08:00", close: "18:00" },
+        acceptedMaterials: [
+          { type: "plastic", pricePerKg: 20 },
+          { type: "paper", pricePerKg: 10 },
+          { type: "metal", pricePerKg: 50 },
+          { type: "glass", pricePerKg: 15 }
+        ],
+        capacity: { current: 5000, maximum: 10000 },
+        contactNumber: "+880-1711-111111",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        _id: createSimpleId(502),
+        name: "Chittagong Port Area Hub",
+        location: {
+          address: "45 Port Road, Agrabad",
+          city: "Chittagong",
+          coordinates: { latitude: 22.3569, longitude: 91.7832 }
+        },
+        wasteTypes: ["plastic", "glass", "electronic"],
+        status: "open",
+        operatingHours: { open: "09:00", close: "17:00" },
+        acceptedMaterials: [
+          { type: "plastic", pricePerKg: 22 },
+          { type: "glass", pricePerKg: 18 },
+          { type: "electronic", pricePerKg: 100 }
+        ],
+        capacity: { current: 3000, maximum: 8000 },
+        contactNumber: "+880-1711-222222",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        _id: createSimpleId(503),
+        name: "Sylhet Eco Waste Center",
+        location: {
+          address: "78 Zindabazar, Sylhet Sadar",
+          city: "Sylhet",
+          coordinates: { latitude: 24.8949, longitude: 91.8687 }
+        },
+        wasteTypes: ["paper", "organic", "textile"],
+        status: "open",
+        operatingHours: { open: "08:30", close: "16:30" },
+        acceptedMaterials: [
+          { type: "paper", pricePerKg: 12 },
+          { type: "organic", pricePerKg: 5 },
+          { type: "textile", pricePerKg: 8 }
+        ],
+        capacity: { current: 2000, maximum: 5000 },
+        contactNumber: "+880-1711-333333",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        _id: createSimpleId(504),
+        name: "Mirpur Recycling Station",
+        location: {
+          address: "12 Mirpur Road, Section 10",
+          city: "Dhaka",
+          coordinates: { latitude: 23.8103, longitude: 90.3687 }
+        },
+        wasteTypes: ["plastic", "metal", "electronic", "hazardous"],
+        status: "maintenance",
+        operatingHours: { open: "10:00", close: "19:00" },
+        acceptedMaterials: [
+          { type: "plastic", pricePerKg: 21 },
+          { type: "metal", pricePerKg: 55 },
+          { type: "electronic", pricePerKg: 120 },
+          { type: "hazardous", pricePerKg: 30 }
+        ],
+        capacity: { current: 1500, maximum: 6000 },
+        contactNumber: "+880-1711-444444",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        _id: createSimpleId(505),
+        name: "Uttara Green Hub",
+        location: {
+          address: "Sector 7, Uttara Model Town",
+          city: "Dhaka",
+          coordinates: { latitude: 23.8759, longitude: 90.3795 }
+        },
+        wasteTypes: ["plastic", "paper", "glass", "organic"],
+        status: "closed",
+        operatingHours: { open: "07:00", close: "20:00" },
+        acceptedMaterials: [
+          { type: "plastic", pricePerKg: 19 },
+          { type: "paper", pricePerKg: 11 },
+          { type: "glass", pricePerKg: 16 },
+          { type: "organic", pricePerKg: 6 }
+        ],
+        capacity: { current: 4000, maximum: 9000 },
+        contactNumber: "+880-1711-555555",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ]);
+
+    const dhakaHub = hubs.find(h => h.name === "Dhaka Central Waste Hub");
+    const chittagongHub = hubs.find(h => h.name === "Chittagong Port Area Hub");
+
+    console.log('✅ 5 waste hubs inserted');
+    console.log(`   Dhaka Hub ID: ${dhakaHub._id}`);
+    console.log(`   Chittagong Hub ID: ${chittagongHub._id}\n`);
+
+    // Insert Credit Transactions
+    console.log('💳 Inserting credit transactions...');
+    await CreditTransaction.insertMany([
+      {
+        _id: createSimpleId(601),
+        userId: regularUser._id,
+        type: "earned",
+        amount: 100,
+        description: "Deposit validation reward - 10kg plastic",
+        referenceType: "deposit",
+        balanceAfter: 100,
+        createdAt: new Date("2025-11-01T10:00:00Z")
+      },
+      {
+        _id: createSimpleId(602),
+        userId: regularUser._id,
+        type: "earned",
+        amount: 150,
+        description: "Deposit validation reward - 15kg glass",
+        referenceType: "deposit",
+        balanceAfter: 250,
+        createdAt: new Date("2025-11-05T14:00:00Z")
+      },
+      {
+        _id: createSimpleId(603),
+        userId: regularUser._id,
+        type: "earned",
+        amount: 250,
+        description: "Deposit validation reward - 25kg paper",
+        referenceType: "deposit",
+        balanceAfter: 500,
+        createdAt: new Date("2025-11-10T11:00:00Z")
+      },
+      {
+        _id: createSimpleId(604),
+        userId: companyABC._id,
+        type: "earned",
+        amount: 500,
+        description: "Campaign participation reward",
+        referenceType: "campaign",
+        balanceAfter: 500,
+        createdAt: new Date("2025-10-15T09:00:00Z")
+      },
+      {
+        _id: createSimpleId(605),
+        userId: companyABC._id,
+        type: "earned",
+        amount: 500,
+        description: "Material collection reward",
+        referenceType: "deposit",
+        balanceAfter: 1000,
+        createdAt: new Date("2025-10-20T13:00:00Z")
+      },
+      {
+        _id: createSimpleId(606),
+        userId: greenIndustries._id,
+        type: "earned",
+        amount: 1000,
+        description: "Bulk deposit validation - 100kg metal",
+        referenceType: "deposit",
+        balanceAfter: 1000,
+        createdAt: new Date("2025-10-25T10:00:00Z")
+      },
+      {
+        _id: createSimpleId(607),
+        userId: greenIndustries._id,
+        type: "earned",
+        amount: 1000,
+        description: "Partnership reward program",
+        referenceType: "partnership",
+        balanceAfter: 2000,
+        createdAt: new Date("2025-11-01T15:00:00Z")
+      }
+    ]);
+    console.log('✅ 7 credit transactions inserted\n');
+
+    // Insert Credit Redemptions
+    console.log('💰 Inserting credit redemptions...');
+    await CreditRedemption.insertMany([
+      {
+        _id: createSimpleId(701),
+        userId: regularUser._id,
+        creditsRedeemed: 0,
+        cashAmount: 0,
+        conversionRate: 1,
+        status: "completed",
+        paymentMethod: "bank_transfer",
+        paymentDetails: {
+          accountNumber: "1234567890",
+          accountName: "Regular User",
+          bankName: "Example Bank"
+        },
+        processedBy: adminUser._id,
+        processedAt: new Date("2025-10-28T16:00:00Z"),
+        createdAt: new Date("2025-10-25T10:00:00Z"),
+        updatedAt: new Date("2025-10-28T16:00:00Z")
+      },
+      {
+        _id: createSimpleId(702),
+        userId: companyABC._id,
+        creditsRedeemed: 0,
+        cashAmount: 0,
+        conversionRate: 1,
+        status: "pending",
+        paymentMethod: "mobile_banking",
+        paymentDetails: {
+          mobileNumber: "+880-1711-999888"
+        },
+        createdAt: new Date("2025-11-15T09:00:00Z"),
+        updatedAt: new Date("2025-11-15T09:00:00Z")
+      }
+    ]);
+    console.log('✅ 2 credit redemptions inserted\n');
+
     // Summary
     const userCount = await User.countDocuments();
     const auctionCount = await Auction.countDocuments();
     const bidCount = await Bid.countDocuments();
     const requirementCount = await MaterialRequirement.countDocuments();
     const notificationCount = await Notification.countDocuments();
+    const wasteHubCount = await WasteHub.countDocuments();
+    const creditTransactionCount = await CreditTransaction.countDocuments();
+    const creditRedemptionCount = await CreditRedemption.countDocuments();
 
     console.log('\n========================================');
     console.log('DATABASE SETUP COMPLETE!');
@@ -475,6 +781,9 @@ const seedDatabase = async () => {
     console.log(`- Bids: ${bidCount}`);
     console.log(`- Material Requirements: ${requirementCount}`);
     console.log(`- Notifications: ${notificationCount}`);
+    console.log(`- Waste Hubs: ${wasteHubCount}`);
+    console.log(`- Credit Transactions: ${creditTransactionCount}`);
+    console.log(`- Credit Redemptions: ${creditRedemptionCount}`);
 
     console.log('\n🔑 Important IDs for Testing:');
     console.log('================================');
@@ -492,6 +801,10 @@ const seedDatabase = async () => {
     console.log('\n📋 Material Requirements:');
     console.log(`Plastic Requirement: ${plasticReq._id}`);
     console.log(`Glass Requirement: ${glassReq._id}`);
+
+    console.log('\n🏭 Waste Hubs:');
+    console.log(`Dhaka Hub: ${dhakaHub._id}`);
+    console.log(`Chittagong Hub: ${chittagongHub._id}`);
 
     console.log('\n✅ You can now start testing the APIs!');
     console.log('Server URL: http://localhost:1213/api');

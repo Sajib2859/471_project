@@ -1,0 +1,289 @@
+{
+  "info": {
+    "name": "Complete Waste Management API - 22299371",
+    "description": "All 12 REST APIs for Module 1 Member 1 (Waste Hubs) + Module 2 Member 1 (Credits) + Team APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:9371",
+      "type": "string"
+    },
+    {
+      "key": "admin_id",
+      "value": "000000000000000000000001",
+      "type": "string"
+    },
+    {
+      "key": "company_abc_id",
+      "value": "000000000000000000000002",
+      "type": "string"
+    },
+    {
+      "key": "green_industries_id",
+      "value": "000000000000000000000003",
+      "type": "string"
+    },
+    {
+      "key": "regular_user_id",
+      "value": "000000000000000000000004",
+      "type": "string"
+    },
+    {
+      "key": "plastic_auction_id",
+      "value": "000000000000000000000101",
+      "type": "string"
+    },
+    {
+      "key": "glass_auction_id",
+      "value": "000000000000000000000102",
+      "type": "string"
+    },
+    {
+      "key": "paper_auction_id",
+      "value": "000000000000000000000103",
+      "type": "string"
+    },
+    {
+      "key": "plastic_req_id",
+      "value": "000000000000000000000301",
+      "type": "string"
+    },
+    {
+      "key": "notification_id",
+      "value": "000000000000000000000401",
+      "type": "string"
+    },
+    {
+      "key": "hub_id",
+      "value": "000000000000000000000501",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "0. Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/health",
+          "host": ["{{base_url}}"],
+          "path": ["api", "health"]
+        },
+        "description": "Check if server is running and get basic info"
+      }
+    },
+    {
+      "name": "Module 1 - Member 1: Waste Hub Locations",
+      "item": [
+        {
+          "name": "1. GET All Waste Hubs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs"]
+            },
+            "description": "Get all waste disposal hub locations"
+          }
+        },
+        {
+          "name": "2. GET Waste Hub by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs/{{hub_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs", "{{hub_id}}"]
+            },
+            "description": "Get specific waste hub details"
+          }
+        },
+        {
+          "name": "3. GET Nearby Waste Hubs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs/nearby?lat=23.8103&lng=90.4125&maxDistance=5000",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs", "nearby"],
+              "query": [
+                {
+                  "key": "lat",
+                  "value": "23.8103"
+                },
+                {
+                  "key": "lng",
+                  "value": "90.4125"
+                },
+                {
+                  "key": "maxDistance",
+                  "value": "5000"
+                }
+              ]
+            },
+            "description": "Find waste hubs within 5km radius"
+          }
+        },
+        {
+          "name": "4. Filter Hubs by Waste Type",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs/filter?wasteType=Plastic",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs", "filter"],
+              "query": [
+                {
+                  "key": "wasteType",
+                  "value": "Plastic"
+                }
+              ]
+            },
+            "description": "Get hubs that accept plastic waste"
+          }
+        },
+        {
+          "name": "5. Filter Hubs by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs/status?status=active",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs", "status"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            },
+            "description": "Get only active waste hubs"
+          }
+        },
+        {
+          "name": "6. GET Accepted Materials",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/waste-hubs/{{hub_id}}/materials",
+              "host": ["{{base_url}}"],
+              "path": ["api", "waste-hubs", "{{hub_id}}", "materials"]
+            },
+            "description": "Get materials accepted by specific hub with pricing"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Module 2 - Member 1: Credit Management",
+      "item": [
+        {
+          "name": "7. GET Credit Balance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/balance",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "balance"]
+            },
+            "description": "Get user's current credit balance"
+          }
+        },
+        {
+          "name": "8. GET Transaction History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/transactions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "transactions"]
+            },
+            "description": "Get user's credit transaction history"
+          }
+        },
+        {
+          "name": "9. Redeem Credits",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 100,\n  \"method\": \"bank_transfer\",\n  \"accountDetails\": {\n    \"accountNumber\": \"1234567890\",\n    \"bankName\": \"Example Bank\",\n    \"accountHolderName\": \"Regular User\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/redeem",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "redeem"]
+            },
+            "description": "Redeem 100 credits for cash"
+          }
+        },
+        {
+          "name": "10. GET Redemption History",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/redemptions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "redemptions"]
+            },
+            "description": "Get user's redemption request history"
+          }
+        },
+        {
+          "name": "11. GET Credit Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/summary",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "summary"]
+            },
+            "description": "Get comprehensive credit analytics"
+          }
+        },
+        {
+          "name": "12. Add Credits",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 50,\n  \"description\": \"Recycled plastic bottles\",\n  \"source\": \"waste_disposal\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{regular_user_id}}/credits/add",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{regular_user_id}}", "credits", "add"]
+            },
+            "description": "Add 50 credits to user account"
+          }
+        }
+      ]
+    }
+  ]
+}
