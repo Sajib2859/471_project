@@ -1,32 +1,47 @@
-import { Request, Response } from 'express';
-import Deposit from '../models/Deposit';
-import WasteHub from '../models/WasteHub';
-import User from '../models/User';
+import { Request, Response } from "express";
+import mongoose from "mongoose";
+import Deposit from "../models/Deposit";
+import User from "../models/User";
+import CreditTransaction from "../models/CreditTransaction";
+import WasteHub from "../models/WasteHub";
 
 /**
- * Module 1 - Member 2: Waste Deposit Registration
- * Users can register deposits of recyclable or non-recyclable waste at selected hubs
+ * Module 1 - Member 3: Waste Hubs & Deposit Management
+ * Admins verify registered deposits, reject with reasons, and allocate credits to users
  */
 
-// POST /api/deposits - Register a new waste deposit
-export const registerDeposit = async (req: Request, res: Response): Promise<void> => {
+// Credit calculation constants (credits per kg by waste type)
+const CREDIT_RATES: Record<string, number> = {
+  plastic: 2.5,
+  glass: 3.0,
+  paper: 1.5,
+  metal: 4.0,
+  organic: 0.5,
+  electronic: 8.0,
+  textile: 2.0,
+  hazardous: 5.0,
+};
+
+// Calculate credits based on waste type and amount
+const calculateCredits = (wasteType: string, amount: number): number => {
+  const rate = CREDIT_RATES[wasteType] || 1;
+  return Math.round(rate * amount * 100) / 100; // Round to 2 decimals
+};
+
+// POST /api/deposits - User registers a new deposit
+export const registerDeposit = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const { userId, hubId, wasteType, quantity, unit, isRecyclable, description } = req.body;
+    const { userId, wasteHubId, wasteType, amount, description, photoUrl } =
+      req.body;
 
-    // Validate required fields
-    if (!userId || !hubId || !wasteType || !quantity) {
+    // Validate input
+    if (!userId || !wasteHubId || !wasteType || !amount) {
       res.status(400).json({
         success: false,
-        message: 'Missing required fields: userId, hubId, wasteType, quantity'
-      });
-      return;
-    }
-
-    // Validate quantity
-    if (quantity <= 0) {
-      res.status(400).json({
-        success: false,
-        message: 'Quantity must be greater than 0'
+        message: "userId, wasteHubId, wasteType, and amount are required",
       });
       return;
     }
@@ -36,364 +51,445 @@ export const registerDeposit = async (req: Request, res: Response): Promise<void
     if (!user) {
       res.status(404).json({
         success: false,
-        message: 'User not found'
+        message: "User not found",
       });
       return;
     }
 
     // Verify waste hub exists
-    const hub = await WasteHub.findById(hubId);
+    const hub = await WasteHub.findById(wasteHubId);
     if (!hub) {
       res.status(404).json({
         success: false,
-        message: 'Waste hub not found'
+        message: "Waste hub not found",
       });
       return;
     }
 
-    // Verify hub accepts this waste type
-    if (!hub.wasteTypes.includes(wasteType)) {
-      res.status(400).json({
-        success: false,
-        message: `This hub does not accept ${wasteType} waste`
-      });
-      return;
-    }
+    // Calculate estimated credits
+    const estimatedCredits = calculateCredits(wasteType, amount);
 
-    // Calculate credits earned (based on quantity and recyclability)
-    // Formula: Base credit = quantity * 10
-    // Recyclable: 100%, Non-recyclable: 50%
-    const baseCredit = quantity * 10;
-    const creditsEarned = isRecyclable ? baseCredit : baseCredit * 0.5;
-
-    // Create new deposit
-    const newDeposit = new Deposit({
+    // Create deposit record
+    const deposit = new Deposit({
       userId,
-      hubId,
+      wasteHubId,
       wasteType,
-      quantity,
-      unit: unit || 'kg',
-      isRecyclable,
-      description: description || '',
-      creditsEarned: Math.round(creditsEarned),
-      status: 'pending',
-      depositDate: new Date()
+      amount,
+      description,
+      photoUrl,
+      status: "pending",
+      estimatedCredits,
     });
 
-    // Save deposit to database
-    await newDeposit.save();
+    await deposit.save();
 
     res.status(201).json({
       success: true,
-      message: 'Deposit registered successfully',
-      data: newDeposit,
-      creditsEarned: Math.round(creditsEarned)
+      message: "Deposit registered successfully. Awaiting admin verification.",
+      data: {
+        depositId: deposit._id,
+        status: deposit.status,
+        estimatedCredits: deposit.estimatedCredits,
+        amount: deposit.amount,
+        wasteType: deposit.wasteType,
+      },
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Error registering deposit',
-      error: error.message
+      message: "Error registering deposit",
+      error: error.message,
     });
   }
 };
 
-// GET /api/deposits - Get all deposits with optional filters
-export const getAllDeposits = async (req: Request, res: Response): Promise<void> => {
+// GET /api/deposits/pending - Admin view all pending deposits for verification
+export const getPendingDeposits = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const { userId, hubId, status, wasteType } = req.query;
+    const { adminId } = req.query;
+    const { limit = "20", page = "1" } = req.query;
 
-    const filter: any = {};
-
-    if (userId) {
-      filter.userId = userId;
+    // Verify admin role
+    if (adminId) {
+      const admin = await User.findById(adminId);
+      if (!admin || admin.role !== "admin") {
+        res.status(403).json({
+          success: false,
+          message: "Only admins can view pending deposits",
+        });
+        return;
+      }
     }
 
-    if (hubId) {
-      filter.hubId = hubId;
-    }
+    const limitNum = parseInt(limit as string);
+    const pageNum = parseInt(page as string);
+    const skip = (pageNum - 1) * limitNum;
 
-    if (status) {
-      filter.status = status;
-    }
+    const deposits = await Deposit.find({ status: "pending" })
+      .populate("userId", "name email")
+      .populate("wasteHubId", "name location")
+      .sort({ createdAt: -1 })
+      .limit(limitNum)
+      .skip(skip);
 
-    if (wasteType) {
-      filter.wasteType = wasteType;
-    }
-
-    const deposits = await Deposit.find(filter)
-      .populate('userId', 'name email')
-      .populate('hubId', 'name location')
-      .sort({ depositDate: -1 });
+    const total = await Deposit.countDocuments({ status: "pending" });
 
     res.status(200).json({
       success: true,
-      count: deposits.length,
-      data: deposits
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum),
+      },
+      data: deposits,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching deposits',
-      error: error.message
+      message: "Error fetching pending deposits",
+      error: error.message,
     });
   }
 };
 
-// GET /api/deposits/:id - Get single deposit by ID
-export const getDepositById = async (req: Request, res: Response): Promise<void> => {
+// GET /api/deposits/:depositId - Get single deposit details
+export const getDepositDetails = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { depositId } = req.params;
 
-    const deposit = await Deposit.findById(id)
-      .populate('userId', 'name email')
-      .populate('hubId', 'name location');
+    const deposit = await Deposit.findById(depositId)
+      .populate("userId", "name email creditBalance")
+      .populate("wasteHubId", "name location acceptedMaterials");
 
     if (!deposit) {
       res.status(404).json({
         success: false,
-        message: 'Deposit not found'
+        message: "Deposit not found",
       });
       return;
     }
 
     res.status(200).json({
       success: true,
-      data: deposit
+      data: deposit,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching deposit',
-      error: error.message
+      message: "Error fetching deposit details",
+      error: error.message,
     });
   }
 };
 
-// GET /api/users/:userId/deposits - Get all deposits for a specific user
-export const getUserDeposits = async (req: Request, res: Response): Promise<void> => {
+// POST /api/deposits/:depositId/verify - Admin verifies a deposit and allocates credits
+export const verifyDeposit = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { depositId } = req.params;
+    const { adminId, creditsToAllocate } = req.body;
+
+    // Validate admin
+    if (!adminId) {
+      res.status(400).json({
+        success: false,
+        message: "adminId is required",
+      });
+      return;
+    }
+
+    const admin = await User.findById(adminId);
+    if (!admin || admin.role !== "admin") {
+      res.status(403).json({
+        success: false,
+        message: "Only admins can verify deposits",
+      });
+      return;
+    }
+
+    // Find deposit
+    const deposit = await Deposit.findById(depositId);
+    if (!deposit) {
+      res.status(404).json({
+        success: false,
+        message: "Deposit not found",
+      });
+      return;
+    }
+
+    if (deposit.status !== "pending") {
+      res.status(400).json({
+        success: false,
+        message: `Deposit cannot be verified. Current status: ${deposit.status}`,
+      });
+      return;
+    }
+
+    // Use provided credits or estimated credits
+    const finalCredits = creditsToAllocate || deposit.estimatedCredits;
+
+    // Update user credit balance
+    const user = await User.findById(deposit.userId);
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+      return;
+    }
+
+    const previousBalance = user.creditBalance;
+    user.creditBalance += finalCredits;
+    await user.save();
+
+    // Update deposit verification details
+    deposit.status = "verified";
+    deposit.verificationDetails = {
+      verifiedBy: new mongoose.Types.ObjectId(adminId),
+      verifiedAt: new Date(),
+      creditAllocated: finalCredits,
+    };
+    await deposit.save();
+
+    // Record credit transaction
+    const transaction = new CreditTransaction({
+      userId: deposit.userId,
+      type: "earned",
+      amount: finalCredits,
+      description: `Credits for waste deposit (${deposit.wasteType}) at waste hub`,
+      referenceId: depositId,
+      referenceType: "deposit",
+      balanceAfter: user.creditBalance,
+    });
+    await transaction.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Deposit verified and credits allocated successfully",
+      data: {
+        depositId: deposit._id,
+        status: deposit.status,
+        creditsAllocated: finalCredits,
+        previousBalance,
+        newBalance: user.creditBalance,
+        userName: user.name,
+        verifiedAt: deposit.verificationDetails?.verifiedAt,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Error verifying deposit",
+      error: error.message,
+    });
+  }
+};
+
+// POST /api/deposits/:depositId/reject - Admin rejects a deposit with reason
+export const rejectDeposit = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { depositId } = req.params;
+    const { adminId, reason } = req.body;
+
+    // Validate input
+    if (!adminId || !reason) {
+      res.status(400).json({
+        success: false,
+        message: "adminId and reason are required",
+      });
+      return;
+    }
+
+    // Verify admin
+    const admin = await User.findById(adminId);
+    if (!admin || admin.role !== "admin") {
+      res.status(403).json({
+        success: false,
+        message: "Only admins can reject deposits",
+      });
+      return;
+    }
+
+    // Find and update deposit
+    const deposit = await Deposit.findById(depositId);
+    if (!deposit) {
+      res.status(404).json({
+        success: false,
+        message: "Deposit not found",
+      });
+      return;
+    }
+
+    if (deposit.status !== "pending") {
+      res.status(400).json({
+        success: false,
+        message: `Deposit cannot be rejected. Current status: ${deposit.status}`,
+      });
+      return;
+    }
+
+    deposit.status = "rejected";
+    deposit.rejectionDetails = {
+      rejectedBy: new mongoose.Types.ObjectId(adminId),
+      rejectedAt: new Date(),
+      reason,
+    };
+    await deposit.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Deposit rejected successfully",
+      data: {
+        depositId: deposit._id,
+        status: deposit.status,
+        rejectionReason: reason,
+        rejectedAt: deposit.rejectionDetails?.rejectedAt,
+      },
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Error rejecting deposit",
+      error: error.message,
+    });
+  }
+};
+
+// GET /api/users/:userId/deposits - User view their deposit history
+export const getUserDeposits = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     const { userId } = req.params;
+    const { status, limit = "20", page = "1" } = req.query;
 
     // Verify user exists
     const user = await User.findById(userId);
     if (!user) {
       res.status(404).json({
         success: false,
-        message: 'User not found'
+        message: "User not found",
       });
       return;
     }
 
-    const deposits = await Deposit.find({ userId })
-      .populate('hubId', 'name location city contactNumber')
-      .sort({ depositDate: -1 });
+    const limitNum = parseInt(limit as string);
+    const pageNum = parseInt(page as string);
+    const skip = (pageNum - 1) * limitNum;
 
-    // Calculate total credits earned
-    const totalCredits = deposits.reduce((sum, deposit) => sum + deposit.creditsEarned, 0);
-
-    res.status(200).json({
-      success: true,
-      count: deposits.length,
-      totalCredits,
-      data: deposits
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching user deposits',
-      error: error.message
-    });
-  }
-};
-
-// GET /api/waste-hubs/:hubId/deposits - Get all deposits for a specific hub
-export const getHubDeposits = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { hubId } = req.params;
-
-    // Verify hub exists
-    const hub = await WasteHub.findById(hubId);
-    if (!hub) {
-      res.status(404).json({
-        success: false,
-        message: 'Waste hub not found'
-      });
-      return;
+    const filter: any = { userId };
+    if (status) {
+      filter.status = status;
     }
 
-    const deposits = await Deposit.find({ hubId })
-      .populate('userId', 'name email')
-      .sort({ depositDate: -1 });
+    const deposits = await Deposit.find(filter)
+      .populate("wasteHubId", "name location")
+      .sort({ createdAt: -1 })
+      .limit(limitNum)
+      .skip(skip);
 
-    // Calculate statistics
-    const totalDeposits = deposits.length;
-    const pendingDeposits = deposits.filter(d => d.status === 'pending').length;
-    const acceptedDeposits = deposits.filter(d => d.status === 'accepted').length;
-    const totalQuantity = deposits.reduce((sum, deposit) => sum + deposit.quantity, 0);
+    const total = await Deposit.countDocuments(filter);
 
-    res.status(200).json({
-      success: true,
-      count: totalDeposits,
-      stats: {
-        total: totalDeposits,
-        pending: pendingDeposits,
-        accepted: acceptedDeposits,
-        totalQuantity
-      },
-      data: deposits
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Error fetching hub deposits',
-      error: error.message
-    });
-  }
-};
-
-// PUT /api/deposits/:id - Update deposit status (admin function)
-export const updateDepositStatus = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    if (!status || !['pending', 'accepted', 'rejected'].includes(status)) {
-      res.status(400).json({
-        success: false,
-        message: 'Invalid status. Must be: pending, accepted, or rejected'
-      });
-      return;
-    }
-
-    const deposit = await Deposit.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
-
-    if (!deposit) {
-      res.status(404).json({
-        success: false,
-        message: 'Deposit not found'
-      });
-      return;
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Deposit status updated successfully',
-      data: deposit
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Error updating deposit status',
-      error: error.message
-    });
-  }
-};
-
-// DELETE /api/deposits/:id - Delete a deposit (only if pending)
-export const deleteDeposit = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { id } = req.params;
-
-    const deposit = await Deposit.findById(id);
-
-    if (!deposit) {
-      res.status(404).json({
-        success: false,
-        message: 'Deposit not found'
-      });
-      return;
-    }
-
-    if (deposit.status !== 'pending') {
-      res.status(400).json({
-        success: false,
-        message: 'Can only delete deposits with pending status'
-      });
-      return;
-    }
-
-    await Deposit.findByIdAndDelete(id);
-
-    res.status(200).json({
-      success: true,
-      message: 'Deposit deleted successfully'
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: 'Error deleting deposit',
-      error: error.message
-    });
-  }
-};
-
-// GET /api/deposits/statistics/summary - Get deposit statistics
-export const getDepositStatistics = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const totalDeposits = await Deposit.countDocuments();
-    const pendingDeposits = await Deposit.countDocuments({ status: 'pending' });
-    const acceptedDeposits = await Deposit.countDocuments({ status: 'accepted' });
-    const rejectedDeposits = await Deposit.countDocuments({ status: 'rejected' });
-
-    const recyclableDeposits = await Deposit.countDocuments({ isRecyclable: true });
-    const nonRecyclableDeposits = await Deposit.countDocuments({ isRecyclable: false });
-
-    const totalQuantity = await Deposit.aggregate([
+    // Calculate summary
+    const summary = await Deposit.aggregate([
+      { $match: filter },
       {
         $group: {
-          _id: null,
-          totalQuantity: { $sum: '$quantity' }
-        }
-      }
-    ]);
-
-    const totalCredits = await Deposit.aggregate([
-      {
-        $group: {
-          _id: null,
-          totalCredits: { $sum: '$creditsEarned' }
-        }
-      }
-    ]);
-
-    const byWasteType = await Deposit.aggregate([
-      {
-        $group: {
-          _id: '$wasteType',
+          _id: "$status",
           count: { $sum: 1 },
-          totalQuantity: { $sum: '$quantity' }
-        }
-      }
+          totalAmount: { $sum: "$amount" },
+          totalCredits: { $sum: "$estimatedCredits" },
+        },
+      },
     ]);
 
     res.status(200).json({
       success: true,
-      data: {
-        totalDeposits,
-        byStatus: {
-          pending: pendingDeposits,
-          accepted: acceptedDeposits,
-          rejected: rejectedDeposits
-        },
-        byRecyclability: {
-          recyclable: recyclableDeposits,
-          nonRecyclable: nonRecyclableDeposits
-        },
-        totalQuantity: totalQuantity[0]?.totalQuantity || 0,
-        totalCredits: totalCredits[0]?.totalCredits || 0,
-        byWasteType
-      }
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total,
+        pages: Math.ceil(total / limitNum),
+      },
+      summary,
+      data: deposits,
     });
   } catch (error: any) {
     res.status(500).json({
       success: false,
-      message: 'Error fetching deposit statistics',
-      error: error.message
+      message: "Error fetching user deposits",
+      error: error.message,
+    });
+  }
+};
+
+// GET /api/deposits/admin/summary - Admin dashboard summary of all deposits
+export const getDepositsSummary = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { adminId } = req.query;
+
+    // Verify admin
+    if (adminId) {
+      const admin = await User.findById(adminId);
+      if (!admin || admin.role !== "admin") {
+        res.status(403).json({
+          success: false,
+          message: "Only admins can view deposit summary",
+        });
+        return;
+      }
+    }
+
+    // Get count statistics
+    const pendingCount = await Deposit.countDocuments({ status: "pending" });
+    const verifiedCount = await Deposit.countDocuments({ status: "verified" });
+    const rejectedCount = await Deposit.countDocuments({ status: "rejected" });
+
+    // Get detailed stats
+    const detailedStats = await Deposit.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+          totalAmount: { $sum: "$amount" },
+          totalCreditsAllocated: {
+            $sum: "$verificationDetails.creditAllocated",
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      success: true,
+      summary: {
+        pending: pendingCount,
+        verified: verifiedCount,
+        rejected: rejectedCount,
+        total: pendingCount + verifiedCount + rejectedCount,
+      },
+      stats: detailedStats,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching deposits summary",
+      error: error.message,
     });
   }
 };

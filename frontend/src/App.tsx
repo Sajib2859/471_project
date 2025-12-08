@@ -1,58 +1,82 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
-import './App.css';
-import WasteHubs from './pages/WasteHubs';
-import Credits from './pages/Credits';
-import Home from './pages/Home';
-import Auctions from './pages/Auctions';
-import MaterialRequirements from './pages/MaterialRequirements';
-import Login from './pages/Login';
-import CompanyDashboard from './pages/CompanyDashboard';
-import WasteDeposit from './pages/WasteDeposit';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+import "./App.css";
+import WasteHubs from "./pages/WasteHubs";
+import Credits from "./pages/Credits";
+import Home from "./pages/Home";
+import Auctions from "./pages/Auctions";
+import MaterialRequirements from "./pages/MaterialRequirements";
+import Login from "./pages/Login";
+import CompanyDashboard from "./pages/CompanyDashboard";
+import DepositManagement from "./pages/DepositManagement";
+import AdminDepositVerification from "./pages/AdminDepositVerification";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsersCompanies from "./pages/AdminUsersCompanies";
+import AdminCreateAuction from "./pages/AdminCreateAuction";
+import AdminAuctionHistory from "./pages/AdminAuctionHistory";
 
 function AppContent() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem('user') || 'null');
+  const user = JSON.parse(localStorage.getItem("user") || "null");
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    navigate('/login');
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (
     <div className="App">
       <header className="header">
         <div className="header-container">
-          <Link to={user?.role === 'company' ? '/company-dashboard' : '/'} className="logo">
+          <Link
+            to={user?.role === "company" ? "/company-dashboard" : "/"}
+            className="logo"
+          >
             ♻️ WasteWise
           </Link>
           <nav className="nav">
             {user ? (
               <>
-                {user.role === 'company' ? (
+                {user.role === "company" ? (
                   <>
                     <Link to="/company-dashboard">Dashboard</Link>
                     <Link to="/auctions">Auctions</Link>
                     <Link to="/materials">Materials</Link>
                     <Link to="/credits">Account</Link>
                   </>
+                ) : user.role === "admin" ? (
+                  <>
+                    <Link to="/">Home</Link>
+                    <Link to="/deposits-verify">Verify Deposits</Link>
+                    <Link to="/waste-hubs">Waste Hubs</Link>
+                    {/* Admin no longer needs a separate "Admin Account" link in the nav */}
+                  </>
                 ) : (
                   <>
                     <Link to="/">Home</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
-                    <Link to="/deposits">Deposits</Link>
+                    <Link to="/deposits">My Deposits</Link>
                     <Link to="/credits">Credits</Link>
                   </>
                 )}
-                <button onClick={handleLogout} style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#757575',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  cursor: 'pointer',
-                  padding: '0.5rem 0'
-                }}>
+                <button
+                  onClick={handleLogout}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#757575",
+                    fontWeight: 600,
+                    fontSize: "0.95rem",
+                    cursor: "pointer",
+                    padding: "0.5rem 0",
+                  }}
+                >
                   Logout ({user.email})
                 </button>
               </>
@@ -73,9 +97,20 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/waste-hubs" element={<WasteHubs />} />
         <Route path="/credits" element={<Credits />} />
+        <Route path="/deposits" element={<DepositManagement />} />
+        <Route path="/deposits-verify" element={<AdminDepositVerification />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/admin-users-companies"
+          element={<AdminUsersCompanies />}
+        />
+        <Route path="/admin-create-auction" element={<AdminCreateAuction />} />
+        <Route
+          path="/admin-auction-history"
+          element={<AdminAuctionHistory />}
+        />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/materials" element={<MaterialRequirements />} />
-        <Route path="/deposits" element={<WasteDeposit />} />
       </Routes>
 
       <footer className="footer">

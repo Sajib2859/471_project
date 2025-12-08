@@ -1,44 +1,42 @@
-import { Router } from 'express';
+import { Router } from "express";
 import {
   registerDeposit,
-  getAllDeposits,
-  getDepositById,
+  getPendingDeposits,
+  getDepositDetails,
+  verifyDeposit,
+  rejectDeposit,
   getUserDeposits,
-  getHubDeposits,
-  updateDepositStatus,
-  deleteDeposit,
-  getDepositStatistics
-} from '../controllers/depositController';
+  getDepositsSummary,
+} from "../controllers/depositController";
 
 const router = Router();
 
 /**
- * Module 1 - Member 2: Waste Deposit Registration
- * Routes for users to register waste deposits at hubs
+ * Module 1 - Member 3: Waste Hubs & Deposit Management
+ * Routes for deposit verification, rejection, and credit allocation
  */
 
-// POST - Register a new waste deposit
-router.post('/deposits', registerDeposit);
+// User routes
+// POST /api/deposits - Register a new waste deposit
+router.post("/deposits", registerDeposit);
 
-// GET - Get all deposits with optional filters
-router.get('/deposits', getAllDeposits);
+// GET /api/users/:userId/deposits - Get user's deposit history
+router.get("/users/:userId/deposits", getUserDeposits);
 
-// GET - Get deposit statistics
-router.get('/deposits/statistics/summary', getDepositStatistics);
+// Admin routes
+// GET /api/deposits/pending - Get all pending deposits for verification (admin only)
+router.get("/deposits/pending", getPendingDeposits);
 
-// GET - Get single deposit by ID (MUST come after /statistics/summary)
-router.get('/deposits/:id', getDepositById);
+// GET /api/deposits/admin/summary - Get admin dashboard summary (admin only)
+router.get("/deposits/admin/summary", getDepositsSummary);
 
-// GET - Get all deposits for a specific user
-router.get('/users/:userId/deposits', getUserDeposits);
+// GET /api/deposits/:depositId - Get single deposit details
+router.get("/deposits/:depositId", getDepositDetails);
 
-// GET - Get all deposits for a specific waste hub
-router.get('/waste-hubs/:hubId/deposits', getHubDeposits);
+// POST /api/deposits/:depositId/verify - Verify deposit and allocate credits (admin only)
+router.post("/deposits/:depositId/verify", verifyDeposit);
 
-// PUT - Update deposit status (admin function)
-router.put('/deposits/:id', updateDepositStatus);
-
-// DELETE - Delete a deposit (only if pending)
-router.delete('/deposits/:id', deleteDeposit);
+// POST /api/deposits/:depositId/reject - Reject deposit with reason (admin only)
+router.post("/deposits/:depositId/reject", rejectDeposit);
 
 export default router;

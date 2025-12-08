@@ -1,73 +1,76 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 export interface IDeposit extends Document {
-  userId: mongoose.Schema.Types.ObjectId;
-  hubId: mongoose.Schema.Types.ObjectId;
-  wasteType: string; // e.g., 'plastic', 'glass', 'paper', 'metal', 'organic', 'electronic', 'textile', 'hazardous'
-  quantity: number;
-  unit: string; // 'kg', 'liters', 'pieces'
-  isRecyclable: boolean;
+  userId: mongoose.Types.ObjectId;
+  wasteHubId: mongoose.Types.ObjectId;
+  wasteType: string; // plastic, glass, paper, metal, organic, electronic, textile, hazardous
+  amount: number; // in kg
   description?: string;
-  status: 'pending' | 'accepted' | 'rejected';
-  creditsEarned: number;
-  depositDate: Date;
+  photoUrl?: string;
+  status: "pending" | "verified" | "rejected";
+  verificationDetails?: {
+    verifiedBy: mongoose.Types.ObjectId; // Admin ID
+    verifiedAt: Date;
+    creditAllocated: number;
+  };
+  rejectionDetails?: {
+    rejectedBy: mongoose.Types.ObjectId; // Admin ID
+    rejectedAt: Date;
+    reason: string;
+  };
+  estimatedCredits: number; // Calculated based on amount and waste type
   createdAt: Date;
   updatedAt: Date;
 }
 
 const depositSchema = new Schema<IDeposit>(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true
-    },
-    hubId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'WasteHub',
-      required: true
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    wasteHubId: {
+      type: Schema.Types.ObjectId,
+      ref: "WasteHub",
+      required: true,
     },
     wasteType: {
       type: String,
       required: true,
-      enum: ['plastic', 'glass', 'paper', 'metal', 'organic', 'electronic', 'textile', 'hazardous']
+      enum: [
+        "plastic",
+        "glass",
+        "paper",
+        "metal",
+        "organic",
+        "electronic",
+        "textile",
+        "hazardous",
+      ],
     },
-    quantity: {
-      type: Number,
-      required: true,
-      min: [0.1, 'Quantity must be greater than 0']
-    },
-    unit: {
-      type: String,
-      required: true,
-      enum: ['kg', 'liters', 'pieces'],
-      default: 'kg'
-    },
-    isRecyclable: {
-      type: Boolean,
-      required: true,
-      default: true
-    },
-    description: {
-      type: String,
-      default: ''
-    },
+    amount: { type: Number, required: true, min: 0.1 },
+    description: { type: String, default: "" },
+    photoUrl: { type: String },
     status: {
       type: String,
-      enum: ['pending', 'accepted', 'rejected'],
-      default: 'pending'
+      enum: ["pending", "verified", "rejected"],
+      default: "pending",
     },
-    creditsEarned: {
-      type: Number,
-      default: 0,
-      min: 0
+    verificationDetails: {
+      verifiedBy: { type: Schema.Types.ObjectId, ref: "User" },
+      verifiedAt: { type: Date },
+      creditAllocated: { type: Number, default: 0 },
     },
-    depositDate: {
-      type: Date,
-      default: Date.now
-    }
+    rejectionDetails: {
+      rejectedBy: { type: Schema.Types.ObjectId, ref: "User" },
+      rejectedAt: { type: Date },
+      reason: { type: String },
+    },
+    estimatedCredits: { type: Number, required: true, default: 0 },
   },
   { timestamps: true }
 );
 
-export default mongoose.model<IDeposit>('Deposit', depositSchema);
+// Index for efficient queries
+depositSchema.index({ userId: 1, status: 1 });
+depositSchema.index({ wasteHubId: 1, status: 1 });
+depositSchema.index({ status: 1, createdAt: -1 });
+
+export default mongoose.model<IDeposit>("Deposit", depositSchema);
