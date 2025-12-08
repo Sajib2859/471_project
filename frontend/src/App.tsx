@@ -8,6 +8,7 @@ import Auctions from './pages/Auctions';
 import MaterialRequirements from './pages/MaterialRequirements';
 import Login from './pages/Login';
 import CompanyDashboard from './pages/CompanyDashboard';
+import WasteDeposit from './pages/WasteDeposit';
 
 function AppContent() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ function AppContent() {
                   <>
                     <Link to="/">Home</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
+                    <Link to="/deposits">Deposits</Link>
                     <Link to="/credits">Credits</Link>
                   </>
                 )}
@@ -73,6 +75,7 @@ function AppContent() {
         <Route path="/credits" element={<Credits />} />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/materials" element={<MaterialRequirements />} />
+        <Route path="/deposits" element={<WasteDeposit />} />
       </Routes>
 
       <footer className="footer">

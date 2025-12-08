@@ -6,6 +6,7 @@ import auctionRoutes from './routes/auctionRoutes';
 import materialRequirementRoutes from './routes/materialRequirementRoutes';
 import wasteHubRoutes from './routes/wasteHubRoutes';
 import creditRoutes from './routes/creditRoutes';
+import depositRoutes from './routes/depositRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -36,6 +37,7 @@ app.get('/', (req: Request, res: Response) => {
       credits: '/api/users/:userId/credits',
       auctions: '/api/auctions',
       materialRequirements: '/api/material-requirements',
+      deposits: '/api/deposits',
       documentation: '/api/docs'
     }
   });
@@ -46,6 +48,7 @@ app.use('/api', wasteHubRoutes);
 app.use('/api', creditRoutes);
 app.use('/api', auctionRoutes);
 app.use('/api', materialRequirementRoutes);
+app.use('/api', depositRoutes);
 
 // API Documentation route
 app.get('/api/docs', (req: Request, res: Response) => {
