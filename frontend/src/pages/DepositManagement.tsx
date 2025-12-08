@@ -21,12 +21,6 @@ interface Deposit {
   createdAt: string;
 }
 
-interface DepositSummary {
-  pending: number;
-  verified: number;
-  rejected: number;
-}
-
 const DepositManagement: React.FC = () => {
   const [wasteHubs, setWasteHubs] = useState<WasteHub[]>([]);
   const [deposits, setDeposits] = useState<Deposit[]>([]);
@@ -34,7 +28,6 @@ const DepositManagement: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"register" | "history">(
     "register"
   );
-  const [summary, setSummary] = useState<DepositSummary | null>(null);
 
   // Form state
   const [selectedHub, setSelectedHub] = useState("");
@@ -80,7 +73,6 @@ const DepositManagement: React.FC = () => {
 
       setWasteHubs(hubsRes.data.data);
       setDeposits(depositsRes.data.data);
-      setSummary(depositsRes.data.summary);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -172,29 +164,6 @@ const DepositManagement: React.FC = () => {
       </section>
 
       <div className="container">
-        {summary && (
-          <div className="stats-grid">
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: "#ff9800" }}>
-                {summary.pending}
-              </div>
-              <div className="stat-label">Pending Review</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: "#4caf50" }}>
-                {summary.verified}
-              </div>
-              <div className="stat-label">Verified</div>
-            </div>
-            <div className="stat-card">
-              <div className="stat-value" style={{ color: "#f44336" }}>
-                {summary.rejected}
-              </div>
-              <div className="stat-label">Rejected</div>
-            </div>
-          </div>
-        )}
-
         <div
           style={{
             display: "flex",

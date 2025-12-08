@@ -119,7 +119,7 @@ function AppContent() {
           <p>&copy; 2025 All Rights Reserved</p>
           <div className="team-info">
             <p>Developed by Group 13 | CSE 471 Project</p>
-            <p>Student IDs: 22299371, 22201213, and team</p>
+            <p>Student IDs: 22299371, 22201213, 22201613, 22201607</p>
           </div>
         </div>
       </footer>
