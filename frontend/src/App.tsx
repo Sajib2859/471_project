@@ -20,6 +20,9 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsersCompanies from "./pages/AdminUsersCompanies";
 import AdminCreateAuction from "./pages/AdminCreateAuction";
 import AdminAuctionHistory from "./pages/AdminAuctionHistory";
+import Campaigns from "./pages/Campaigns";
+import WasteReports from "./pages/WasteReports";
+import Blogs from "./pages/Blogs";
 
 function AppContent() {
   const navigate = useNavigate();
@@ -48,6 +51,9 @@ function AppContent() {
                     <Link to="/company-dashboard">Dashboard</Link>
                     <Link to="/auctions">Auctions</Link>
                     <Link to="/materials">Materials</Link>
+                    <Link to="/campaigns">Campaigns</Link>
+                    <Link to="/waste-reports">Reports</Link>
+                    <Link to="/blogs">Blogs</Link>
                     <Link to="/credits">Account</Link>
                   </>
                 ) : user.role === "admin" ? (
@@ -55,6 +61,9 @@ function AppContent() {
                     <Link to="/">Home</Link>
                     <Link to="/deposits-verify">Verify Deposits</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
+                    <Link to="/campaigns">Campaigns</Link>
+                    <Link to="/waste-reports">Reports</Link>
+                    <Link to="/blogs">Blogs</Link>
                     {/* Admin no longer needs a separate "Admin Account" link in the nav */}
                   </>
                 ) : (
@@ -62,6 +71,9 @@ function AppContent() {
                     <Link to="/">Home</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
                     <Link to="/deposits">My Deposits</Link>
+                    <Link to="/campaigns">Campaigns</Link>
+                    <Link to="/waste-reports">Reports</Link>
+                    <Link to="/blogs">Blogs</Link>
                     <Link to="/credits">Credits</Link>
                   </>
                 )}
@@ -84,6 +96,9 @@ function AppContent() {
               <>
                 <Link to="/">Home</Link>
                 <Link to="/waste-hubs">Waste Hubs</Link>
+                <Link to="/campaigns">Campaigns</Link>
+                <Link to="/waste-reports">Reports</Link>
+                <Link to="/blogs">Blogs</Link>
                 <Link to="/login">Login</Link>
               </>
             )}
@@ -111,6 +126,9 @@ function AppContent() {
         />
         <Route path="/auctions" element={<Auctions />} />
         <Route path="/materials" element={<MaterialRequirements />} />
+        <Route path="/campaigns" element={<Campaigns />} />
+        <Route path="/waste-reports" element={<WasteReports />} />
+        <Route path="/blogs" element={<Blogs />} />
       </Routes>
 
       <footer className="footer">
