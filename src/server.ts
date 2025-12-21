@@ -7,6 +7,9 @@ import materialRequirementRoutes from "./routes/materialRequirementRoutes";
 import wasteHubRoutes from "./routes/wasteHubRoutes";
 import creditRoutes from "./routes/creditRoutes";
 import depositRoutes from "./routes/depositRoutes";
+import campaignRoutes from "./routes/campaignRoutes";
+import wasteReportRoutes from "./routes/wasteReportRoutes";
+import blogRoutes from "./routes/blogRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -38,6 +41,9 @@ app.get("/", (req: Request, res: Response) => {
       auctions: "/api/auctions",
       materialRequirements: "/api/material-requirements",
       deposits: "/api/deposits",
+      campaigns: "/api/campaigns",
+      wasteReports: "/api/waste-reports",
+      blogs: "/api/blogs",
       documentation: "/api/docs",
     },
   });
@@ -49,13 +55,16 @@ app.use("/api", creditRoutes);
 app.use("/api", auctionRoutes);
 app.use("/api", materialRequirementRoutes);
 app.use("/api", depositRoutes);
+app.use("/api", campaignRoutes);
+app.use("/api", wasteReportRoutes);
+app.use("/api", blogRoutes);
 
 // API Documentation route
 app.get("/api/docs", (req: Request, res: Response) => {
   res.json({
     success: true,
     studentId: "22299371",
-    modules: "Module 1 & Module 2",
+    modules: "Module 1, Module 2 & Module 3",
     features: [
       {
         feature: "Module 1 - Member 1",
@@ -123,6 +132,75 @@ app.get("/api/docs", (req: Request, res: Response) => {
           "POST /api/deposits/:depositId/reject - Reject deposit with reason (admin only)",
           "GET /api/users/:userId/deposits - View user's deposit history",
           "GET /api/deposits/admin/summary - Get admin dashboard summary (admin only)",
+        ],
+      },
+      {
+        feature: "Module 3 - Member 1",
+        description:
+          "Admins create and manage waste management or cleanup campaigns with scheduling, locations, and participant lists",
+        endpoints: [
+          "POST /api/campaigns - Create a new campaign (admin only)",
+          "GET /api/campaigns - View all campaigns with filters",
+          "GET /api/campaigns/:id - View single campaign details",
+          "PUT /api/campaigns/:id - Update campaign (admin only)",
+          "DELETE /api/campaigns/:id - Delete campaign (admin only)",
+          "POST /api/campaigns/:id/volunteer - Volunteer for a campaign",
+          "POST /api/campaigns/:id/follow - Follow a campaign",
+          "POST /api/campaigns/:id/unfollow - Unfollow a campaign",
+          "PUT /api/campaigns/:id/progress - Update campaign progress (admin only)",
+          "GET /api/campaigns/:id/participants - View campaign participants",
+          "GET /api/users/:userId/campaigns - View user's campaigns",
+        ],
+      },
+      {
+        feature: "Module 3 - Member 2",
+        description:
+          "Users report locations where waste has accumulated with photos and waste type specifications",
+        endpoints: [
+          "POST /api/waste-reports - Create a new waste report",
+          "GET /api/waste-reports - View all waste reports with filters",
+          "GET /api/waste-reports/stats - Get waste report statistics",
+          "GET /api/waste-reports/:id - View single waste report",
+          "PUT /api/waste-reports/:id - Update waste report",
+          "DELETE /api/waste-reports/:id - Delete waste report",
+          "POST /api/waste-reports/:id/verify - Verify report (admin only)",
+          "POST /api/waste-reports/:id/assign - Assign report to cleanup team (admin only)",
+          "POST /api/waste-reports/:id/resolve - Mark report as resolved (admin only)",
+          "POST /api/waste-reports/:id/upvote - Upvote a waste report",
+          "GET /api/users/:userId/waste-reports - View user's waste reports",
+        ],
+      },
+      {
+        feature: "Module 3 - Member 3",
+        description:
+          "Users and admins post blogs/articles about recycling, waste management best practices, and cleanup news",
+        endpoints: [
+          "POST /api/blogs - Create a new blog post",
+          "GET /api/blogs - View all blogs with filters",
+          "GET /api/blogs/stats - Get blog statistics",
+          "GET /api/blogs/trending - Get trending blogs",
+          "GET /api/blogs/category/:category - Get blogs by category",
+          "GET /api/blogs/:id - View single blog",
+          "PUT /api/blogs/:id - Update blog",
+          "DELETE /api/blogs/:id - Delete blog",
+          "POST /api/blogs/:id/like - Like a blog",
+          "POST /api/blogs/:id/unlike - Unlike a blog",
+          "POST /api/blogs/:id/comment - Add comment to blog",
+          "DELETE /api/blogs/:id/comment/:commentIndex - Delete comment",
+          "GET /api/users/:userId/blogs - View user's blogs",
+        ],
+      },
+      {
+        feature: "Module 3 - Member 4",
+        description:
+          "Users volunteer for or follow campaigns, view campaign progress, and receive updates and notifications",
+        endpoints: [
+          "POST /api/campaigns/:id/volunteer - Volunteer for a campaign",
+          "POST /api/campaigns/:id/follow - Follow a campaign for updates",
+          "POST /api/campaigns/:id/unfollow - Unfollow a campaign",
+          "GET /api/campaigns/:id/participants - View volunteers and followers",
+          "GET /api/users/:userId/campaigns - View user's volunteered and followed campaigns",
+          "PUT /api/campaigns/:id/progress - Update progress (sends notifications to followers/volunteers)",
         ],
       },
     ],
