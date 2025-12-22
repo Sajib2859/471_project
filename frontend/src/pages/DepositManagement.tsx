@@ -17,7 +17,7 @@ interface Deposit {
   amount: number;
   status: "pending" | "verified" | "rejected";
   estimatedCredits: number;
-  wasteHubId: { name: string };
+  wasteHubId: { name: string } | null;
   createdAt: string;
 }
 
@@ -449,7 +449,7 @@ const DepositManagement: React.FC = () => {
                           >
                             {deposit.wasteType.toUpperCase()}
                           </span>
-                          {deposit.amount} kg at {deposit.wasteHubId.name}
+                          {deposit.amount} kg at {deposit.wasteHubId?.name || "Unknown Hub"}
                         </h3>
                       </div>
                       <div

@@ -6,8 +6,8 @@ const ADMIN_ID = "000000000000000000000001"; // Admin user from seed data
 
 interface Deposit {
   _id: string;
-  userId: { _id: string; name: string; email: string };
-  wasteHubId: { _id: string; name: string };
+  userId: { _id: string; name: string; email: string } | null;
+  wasteHubId: { _id: string; name: string } | null;
   wasteType: string;
   amount: number;
   description?: string;
@@ -330,7 +330,7 @@ const AdminDepositVerification: React.FC = () => {
                               fontSize: "1.2rem",
                             }}
                           >
-                            User: {deposit.userId.name}
+                            User: {deposit.userId?.name || "Unknown User"}
                           </h3>
                           <p
                             style={{
@@ -339,7 +339,7 @@ const AdminDepositVerification: React.FC = () => {
                               fontSize: "0.9rem",
                             }}
                           >
-                            Email: {deposit.userId.email}
+                            Email: {deposit.userId?.email || "N/A"}
                           </p>
                           <p
                             style={{
@@ -348,7 +348,7 @@ const AdminDepositVerification: React.FC = () => {
                               fontSize: "0.9rem",
                             }}
                           >
-                            Hub: {deposit.wasteHubId.name}
+                            Hub: {deposit.wasteHubId?.name || "Unknown Hub"}
                           </p>
                         </div>
                         <div style={{ textAlign: "right" }}>
