@@ -10,6 +10,7 @@ import depositRoutes from "./routes/depositRoutes";
 import campaignRoutes from "./routes/campaignRoutes";
 import wasteReportRoutes from "./routes/wasteReportRoutes";
 import blogRoutes from "./routes/blogRoutes";
+import userRoutes from "./routes/userRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -50,6 +51,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // API Routes
+app.use("/api/users", userRoutes);
 app.use("/api", wasteHubRoutes);
 app.use("/api", creditRoutes);
 app.use("/api", auctionRoutes);

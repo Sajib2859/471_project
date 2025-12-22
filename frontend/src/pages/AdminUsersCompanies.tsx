@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const API_BASE = "http://localhost:9371/api";
 
 interface User {
   _id: string;
@@ -14,6 +17,7 @@ interface User {
 const AdminUsersCompanies: React.FC = () => {
   const navigate = useNavigate();
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filterRole, setFilterRole] = useState<
     "all" | "user" | "company" | "admin"
   >("all");
@@ -28,66 +32,23 @@ const AdminUsersCompanies: React.FC = () => {
     userId: "",
   });
 
-  // Mock user data
+  // Fetch users from API
   useEffect(() => {
-    const mockUsers: User[] = [
-      {
-        _id: "000000000000000000000001",
-        name: "Admin User",
-        email: "admin@wastewise.com",
-        role: "admin",
-        creditBalance: 0,
-        cashBalance: 0,
-        createdAt: "2025-01-01",
-      },
-      {
-        _id: "000000000000000000000002",
-        name: "Company ABC",
-        email: "company@example.com",
-        role: "company",
-        creditBalance: 5000,
-        cashBalance: 50000,
-        createdAt: "2025-01-05",
-      },
-      {
-        _id: "000000000000000000000003",
-        name: "Tech Industries",
-        email: "tech@industries.com",
-        role: "company",
-        creditBalance: 8500,
-        cashBalance: 85000,
-        createdAt: "2025-01-10",
-      },
-      {
-        _id: "000000000000000000000004",
-        name: "Regular User",
-        email: "user@example.com",
-        role: "user",
-        creditBalance: 250,
-        cashBalance: 5000,
-        createdAt: "2025-01-15",
-      },
-      {
-        _id: "000000000000000000000005",
-        name: "John Doe",
-        email: "john@example.com",
-        role: "user",
-        creditBalance: 450,
-        cashBalance: 8000,
-        createdAt: "2025-01-18",
-      },
-      {
-        _id: "000000000000000000000006",
-        name: "Eco Solutions Ltd",
-        email: "eco@solutions.com",
-        role: "company",
-        creditBalance: 12000,
-        cashBalance: 120000,
-        createdAt: "2025-01-20",
-      },
-    ];
-    setUsers(mockUsers);
+    fetchUsers();
   }, []);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${API_BASE}/users`);
+      setUsers(response.data.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      alert("Error loading users from database");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filteredUsers = users.filter((user) => {
     const matchesRole = filterRole === "all" || user.role === filterRole;
@@ -102,11 +63,23 @@ const AdminUsersCompanies: React.FC = () => {
     setShowModal(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (editingUser) {
-      setUsers(users.map((u) => (u._id === editingUser._id ? editingUser : u)));
-      setShowModal(false);
-      setEditingUser(null);
+      try {
+        await axios.put(`${API_BASE}/users/${editingUser._id}`, {
+          name: editingUser.name,
+          email: editingUser.email,
+          role: editingUser.role,
+          creditBalance: editingUser.creditBalance,
+          cashBalance: editingUser.cashBalance
+        });
+        alert("User updated successfully!");
+        fetchUsers(); // Refresh the list
+        setShowModal(false);
+        setEditingUser(null);
+      } catch (error: any) {
+        alert(error.response?.data?.message || "Error updating user");
+      }
     }
   };
 
@@ -114,9 +87,15 @@ const AdminUsersCompanies: React.FC = () => {
     setDeleteConfirm({ show: true, userId });
   };
 
-  const confirmDelete = () => {
-    setUsers(users.filter((u) => u._id !== deleteConfirm.userId));
-    setDeleteConfirm({ show: false, userId: "" });
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`${API_BASE}/users/${deleteConfirm.userId}`);
+      alert("User deleted successfully!");
+      fetchUsers(); // Refresh the list
+      setDeleteConfirm({ show: false, userId: "" });
+    } catch (error: any) {
+      alert(error.response?.data?.message || "Error deleting user");
+    }
   };
 
   const getRoleColor = (role: string) => {

@@ -38,7 +38,7 @@ function AppContent() {
       <header className="header">
         <div className="header-container">
           <Link
-            to={user?.role === "company" ? "/company-dashboard" : "/"}
+            to={user?.role === "company" ? "/company-dashboard" : user?.role === "admin" ? "/admin-dashboard" : "/"}
             className="logo"
           >
             ♻️ WasteWise
@@ -58,7 +58,7 @@ function AppContent() {
                   </>
                 ) : user.role === "admin" ? (
                   <>
-                    <Link to="/">Home</Link>
+                    <Link to="/admin-dashboard">Dashboard</Link>
                     <Link to="/deposits-verify">Verify Deposits</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
                     <Link to="/campaigns">Campaigns</Link>
