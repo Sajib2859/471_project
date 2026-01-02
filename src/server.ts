@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 import connectDB from "./config/database";
 import auctionRoutes from "./routes/auctionRoutes";
 import materialRequirementRoutes from "./routes/materialRequirementRoutes";
@@ -14,6 +15,9 @@ import userRoutes from "./routes/userRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
 import analyticsRoutes from "./routes/analyticsRoutes";
 import roleRoutes from "./routes/roleRoutes";
+import ratingRoutes from "./routes/ratingRoutes";
+import announcementRoutes from "./routes/announcementRoutes";
+import profileRoutes from "./routes/profileRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +29,9 @@ const PORT = parseInt(process.env.PORT || "9371", 10);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve static files (for uploaded images)
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Request logging middleware
 app.use((req: Request, res: Response, next) => {
@@ -66,6 +73,9 @@ app.use("/api", depositRoutes);
 app.use("/api", campaignRoutes);
 app.use("/api", wasteReportRoutes);
 app.use("/api", blogRoutes);
+app.use("/api", ratingRoutes);
+app.use("/api", announcementRoutes);
+app.use("/api", profileRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", analyticsRoutes);
 app.use("/api", roleRoutes);

@@ -1,6 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import API_BASE_URL from '../config';
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import FRONTEND_CONFIG from '../config/constants';
+
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const API_BASE = API_BASE_URL;
 const USER_ID = '000000000000000000000004'; // Regular user from seed data
@@ -181,6 +204,51 @@ const Credits: React.FC = () => {
         {activeTab === 'overview' && balance && (
           <div>
             <h2 className="section-title">Account Overview</h2>
+            
+            {/* Credit Trend Chart */}
+            {transactions.length > 0 && (
+              <div className="card" style={{ marginBottom: '2rem' }}>
+                <h3 style={{ marginBottom: '1rem' }}>Credit Balance Trend</h3>
+                <Line
+                  data={{
+                    labels: transactions.slice(-FRONTEND_CONFIG.CHART.MAX_DATA_POINTS).reverse().map((t) => 
+                      new Date(t.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                    ),
+                    datasets: [
+                      {
+                        label: 'Credit Balance',
+                        data: transactions.slice(-FRONTEND_CONFIG.CHART.MAX_DATA_POINTS).reverse().map((t) => t.balanceAfter),
+                        borderColor: FRONTEND_CONFIG.CHART.COLORS.primary,
+                        backgroundColor: FRONTEND_CONFIG.CHART.COLORS.secondary,
+                        tension: 0.4,
+                        fill: true
+                      }
+                    ]
+                  }}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: {
+                        display: false
+                      },
+                      title: {
+                        display: false
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: 'Credits'
+                        }
+                      }
+                    }
+                  }}
+                />
+              </div>
+            )}
+
             <div className="card" style={{maxWidth: '600px', margin: '0 auto'}}>
               <h3>{balance.name}</h3>
               <p><strong>Email:</strong> {balance.email}</p>

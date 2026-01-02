@@ -27,6 +27,10 @@ import Notifications from "./pages/Notifications";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import AdminRoleManagement from "./pages/AdminRoleManagement";
 import CompanyAnalytics from "./pages/CompanyAnalytics";
+import UserProfile from "./pages/UserProfile";
+import AdminAnnouncements from "./pages/AdminAnnouncements";
+import ThemeToggle from "./components/ThemeToggle";
+import AnnouncementBanner from "./components/AnnouncementBanner";
 
 function AppContent() {
   const navigate = useNavigate();
@@ -68,6 +72,7 @@ function AppContent() {
                     <Link to="/deposits-verify">Verify Deposits</Link>
                     <Link to="/admin-analytics">Analytics</Link>
                     <Link to="/admin-roles">Role Management</Link>
+                    <Link to="/admin-announcements">Announcements</Link>
                     <Link to="/waste-hubs">Waste Hubs</Link>
                     <Link to="/campaigns">Campaigns</Link>
                     <Link to="/waste-reports">Reports</Link>
@@ -83,6 +88,7 @@ function AppContent() {
                     <Link to="/waste-reports">Reports</Link>
                     <Link to="/blogs">Blogs</Link>
                     <Link to="/notifications">Notifications</Link>
+                    <Link to="/profile">Profile</Link>
                     <Link to="/credits">Credits</Link>
                   </>
                 )}
@@ -115,6 +121,8 @@ function AppContent() {
         </div>
       </header>
 
+      <AnnouncementBanner />
+
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/company-dashboard" element={<CompanyDashboard />} />
@@ -141,8 +149,12 @@ function AppContent() {
         <Route path="/notifications" element={<Notifications />} />
         <Route path="/admin-analytics" element={<AdminAnalytics />} />
         <Route path="/admin-roles" element={<AdminRoleManagement />} />
+        <Route path="/admin-announcements" element={<AdminAnnouncements />} />
         <Route path="/company-analytics" element={<CompanyAnalytics />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
+
+      <ThemeToggle />
 
       <footer className="footer">
         <div className="footer-content">
