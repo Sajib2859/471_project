@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../config";
 
-const API_BASE = "http://localhost:9371/api";
-const ADMIN_ID = "000000000000000000000001"; // Admin user from seed data
+const API_BASE = API_BASE_URL;
 
 interface Deposit {
   _id: string;
@@ -43,6 +43,10 @@ const AdminDepositVerification: React.FC = () => {
   const [customCredits, setCustomCredits] = useState("");
   const [rejectionReason, setRejectionReason] = useState("");
   const [verificationLoading, setVerificationLoading] = useState(false);
+
+  // Get admin user from localStorage
+  const adminUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const ADMIN_ID = adminUser.id;
 
   useEffect(() => {
     fetchDeposits();

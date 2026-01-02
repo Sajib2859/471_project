@@ -4,6 +4,7 @@ import Deposit from "../models/Deposit";
 import User from "../models/User";
 import CreditTransaction from "../models/CreditTransaction";
 import WasteHub from "../models/WasteHub";
+import { sendNotification } from "./notificationController";
 
 /**
  * Module 1 - Member 3: Waste Hubs & Deposit Management
@@ -272,6 +273,18 @@ export const verifyDeposit = async (
     });
     await transaction.save();
 
+    // Send notification to user
+    await sendNotification(
+      deposit.userId.toString(),
+      'deposit_validation',
+      'Deposit Verified! 🎉',
+      `Your ${deposit.wasteType} deposit has been verified and you earned ${finalCredits} credits!`,
+      depositId,
+      'deposit',
+      'high',
+      { creditsAllocated: finalCredits, wasteType: deposit.wasteType }
+    );
+
     res.status(200).json({
       success: true,
       message: "Deposit verified and credits allocated successfully",
@@ -347,6 +360,18 @@ export const rejectDeposit = async (
       reason,
     };
     await deposit.save();
+
+    // Send notification to user about rejection
+    await sendNotification(
+      deposit.userId.toString(),
+      'deposit_validation',
+      'Deposit Rejected',
+      `Your ${deposit.wasteType} deposit was rejected. Reason: ${reason}`,
+      depositId,
+      'deposit',
+      'medium',
+      { reason, wasteType: deposit.wasteType }
+    );
 
     res.status(200).json({
       success: true,

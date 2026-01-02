@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from "../config";
 
-const API_URL = "http://localhost:9371/api";
+const API_URL = API_BASE_URL;
 
 interface Campaign {
   _id: string;

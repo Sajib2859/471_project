@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import User from '../models/User';
 import CreditTransaction from '../models/CreditTransaction';
 import CreditRedemption from '../models/CreditRedemption';
+import { sendNotification } from './notificationController';
 
 /**
  * Module 2 - Member 1: Credit, Auctions, & Marketplace
@@ -178,6 +179,18 @@ export const redeemCredits = async (req: Request, res: Response): Promise<void> 
       referenceType: 'redemption',
       balanceAfter: user.creditBalance
     });
+
+    // Send notification to user
+    await sendNotification(
+      userId,
+      'credit_redemption',
+      'Credit Redemption Request Received',
+      `Your request to redeem ${creditsToRedeem} credits for ${cashAmount} cash has been submitted and is pending approval.`,
+      redemption._id.toString(),
+      'credit',
+      'medium',
+      { creditsRedeemed: creditsToRedeem, cashAmount, paymentMethod }
+    );
 
     res.status(201).json({
       success: true,

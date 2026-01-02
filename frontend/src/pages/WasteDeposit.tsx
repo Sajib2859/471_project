@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from "../config";
 
-const API_BASE = 'http://localhost:9371/api';
+const API_BASE = API_BASE_URL;
 
 interface WasteHub {
   _id: string;
@@ -34,10 +35,11 @@ const WasteDeposit: React.FC = () => {
   const [userDeposits, setUserDeposits] = useState<Deposit[]>([]);
   const [loading, setLoading] = useState(true);
   const [registering, setRegistering] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
-    userId: '000000000000000000000004', // Default regular user
+    userId: '',
     hubId: '',
     wasteType: '',
     quantity: '',
@@ -51,13 +53,27 @@ const WasteDeposit: React.FC = () => {
 
   // Fetch waste hubs and user deposits on mount
   useEffect(() => {
+    // Get user from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      setCurrentUserId(user.id);
+      setFormData(prev => ({ ...prev, userId: user.id }));
+    }
+
     const loadData = async () => {
       await fetchHubs();
-      await fetchUserDeposits();
     };
     loadData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (currentUserId) {
+      fetchUserDeposits();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserId]);
 
   const fetchHubs = async () => {
     try {
@@ -71,7 +87,7 @@ const WasteDeposit: React.FC = () => {
 
   const fetchUserDeposits = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/users/${formData.userId}/deposits`);
+      const response = await axios.get(`${API_BASE}/users/${currentUserId}/deposits`);
       setUserDeposits(response.data.data);
     } catch (error) {
       console.error('Error fetching deposits:', error);
@@ -93,14 +109,6 @@ const WasteDeposit: React.FC = () => {
       ...prev,
       hubId: e.target.value,
       wasteType: '' // Reset waste type when hub changes
-    }));
-  };
-
-  const handleUserChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const userId = e.target.value;
-    setFormData(prev => ({
-      ...prev,
-      userId
     }));
   };
 
@@ -229,23 +237,6 @@ const WasteDeposit: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem' }}>
               
-              {/* User Selection */}
-              <div className="form-group">
-                <label>User</label>
-                <select
-                  className="form-control"
-                  name="userId"
-                  value={formData.userId}
-                  onChange={handleUserChange}
-                  required
-                >
-                  <option value="000000000000000000000001">Admin</option>
-                  <option value="000000000000000000000002">Company ABC</option>
-                  <option value="000000000000000000000003">Green Industries</option>
-                  <option value="000000000000000000000004">Regular User</option>
-                </select>
-              </div>
-
               {/* Waste Hub Selection */}
               <div className="form-group">
                 <label>Select Waste Hub *</label>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_BASE_URL from '../config';
 
-const API_BASE = 'http://localhost:9371/api';
+const API_BASE = API_BASE_URL;
 const USER_ID = '000000000000000000000004'; // Regular user from seed data
 
 interface CreditBalance {

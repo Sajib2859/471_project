@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from "../config";
 
-const API_BASE = "http://localhost:9371/api";
+const API_BASE = API_BASE_URL;
 
 interface Auction {
   _id: string;

@@ -11,6 +11,9 @@ import campaignRoutes from "./routes/campaignRoutes";
 import wasteReportRoutes from "./routes/wasteReportRoutes";
 import blogRoutes from "./routes/blogRoutes";
 import userRoutes from "./routes/userRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
+import analyticsRoutes from "./routes/analyticsRoutes";
+import roleRoutes from "./routes/roleRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -45,6 +48,9 @@ app.get("/", (req: Request, res: Response) => {
       campaigns: "/api/campaigns",
       wasteReports: "/api/waste-reports",
       blogs: "/api/blogs",
+      notifications: "/api/users/:userId/notifications",
+      analytics: "/api/analytics",
+      roles: "/api/roles",
       documentation: "/api/docs",
     },
   });
@@ -60,13 +66,16 @@ app.use("/api", depositRoutes);
 app.use("/api", campaignRoutes);
 app.use("/api", wasteReportRoutes);
 app.use("/api", blogRoutes);
+app.use("/api", notificationRoutes);
+app.use("/api", analyticsRoutes);
+app.use("/api", roleRoutes);
 
 // API Documentation route
 app.get("/api/docs", (req: Request, res: Response) => {
   res.json({
     success: true,
     studentId: "22299371",
-    modules: "Module 1, Module 2 & Module 3",
+    modules: "Module 1, Module 2, Module 3 & Module 4",
     features: [
       {
         feature: "Module 1 - Member 1",
@@ -203,6 +212,55 @@ app.get("/api/docs", (req: Request, res: Response) => {
           "GET /api/campaigns/:id/participants - View volunteers and followers",
           "GET /api/users/:userId/campaigns - View user's volunteered and followed campaigns",
           "PUT /api/campaigns/:id/progress - Update progress (sends notifications to followers/volunteers)",
+        ],
+      },
+      {
+        feature: "Module 4 - Member 1",
+        description:
+          "Real-time notifications about deposit validation, campaign updates, auction activity, direct messages, and credit redemption events",
+        endpoints: [
+          "POST /api/notifications - Create notification",
+          "GET /api/users/:userId/notifications - Get user notifications",
+          "GET /api/users/:userId/notifications/stats - Get notification statistics",
+          "PUT /api/notifications/:notificationId/read - Mark notification as read",
+          "PUT /api/users/:userId/notifications/read-all - Mark all as read",
+          "DELETE /api/notifications/:notificationId - Delete notification",
+          "DELETE /api/users/:userId/notifications - Delete all notifications",
+        ],
+      },
+      {
+        feature: "Module 4 - Member 2",
+        description:
+          "Admins generate and export analytics reports on platform usage, waste deposited, campaign success, and user engagement",
+        endpoints: [
+          "GET /api/analytics/platform-usage - Get platform usage analytics",
+          "GET /api/analytics/waste - Get waste analytics",
+          "GET /api/analytics/campaigns - Get campaign analytics",
+          "GET /api/analytics/user-engagement - Get user engagement analytics",
+          "GET /api/analytics/activity-logs - Get activity logs",
+          "GET /api/analytics/export?type=<type> - Export analytics as CSV (deposits, campaigns, auctions, activity-logs)",
+        ],
+      },
+      {
+        feature: "Module 4 - Member 3",
+        description:
+          "Admins assign and manage user roles (user, admin, company), adjust permissions, and view logs of platform activities",
+        endpoints: [
+          "GET /api/roles/users - Get all users with roles",
+          "GET /api/roles/statistics - Get role statistics",
+          "GET /api/roles/history - Get role change history",
+          "GET /api/roles/users/:userId/permissions - Get user permissions",
+          "PUT /api/roles/users/:userId - Update user role",
+          "POST /api/roles/bulk-update - Bulk update user roles",
+          "DELETE /api/roles/users/:userId - Delete user",
+        ],
+      },
+      {
+        feature: "Module 4 - Member 4",
+        description:
+          "Companies view analytics about their participation: auctions won, materials acquired, and transaction history",
+        endpoints: [
+          "GET /api/analytics/company/:companyId - Get company analytics",
         ],
       },
     ],
