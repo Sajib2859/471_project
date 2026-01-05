@@ -29,8 +29,10 @@ const AnnouncementBanner: React.FC = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/announcements`);
-      setAnnouncements(response.data);
+      const response = await axios.get(`${API_BASE}/announcements/active`);
+      if (response.data.announcements) {
+        setAnnouncements(response.data.announcements);
+      }
     } catch (error) {
       console.error('Error fetching announcements:', error);
     }
