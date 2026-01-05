@@ -11,6 +11,8 @@ import { sendNotification } from "./notificationController";
  * Admins verify registered deposits, reject with reasons, and allocate credits to users
  */
 
+
+
 // Credit calculation constants (credits per kg by waste type)
 const CREDIT_RATES: Record<string, number> = {
   plastic: 2.5,
