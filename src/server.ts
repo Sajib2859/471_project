@@ -299,17 +299,23 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 // Start server with database connection
 const startServer = async () => {
   try {
-    // Try to connect to database (but don't exit if it fails)
-    await connectDB();
+    // Try to connect to database (but don't crash if it fails)
+    try {
+      await connectDB();
+    } catch (error) {
+      console.error('Database connection failed, but server will continue');
+    }
 
-    // Then start the server
-    const server = app.listen(PORT, "0.0.0.0", () => {
+    // Start the server regardless of DB connection
+    const PORT_NUMBER = parseInt(process.env.PORT || "9371", 10);
+    
+    const server = app.listen(PORT_NUMBER, () => {
       console.log("═══════════════════════════════════════════════════");
       console.log("🚀 Waste Management API Server Started");
       console.log("═══════════════════════════════════════════════════");
-      console.log(`📍 Server running on: http://localhost:${PORT}`);
+      console.log(`📍 Server running on port: ${PORT_NUMBER}`);
       console.log(`👤 Student ID: 22299371`);
-      console.log(`📝 API Documentation: http://localhost:${PORT}/api/docs`);
+      console.log(`📝 API Documentation: /api/docs`);
       console.log(`🌐 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log("═══════════════════════════════════════════════════");
       console.log("✅ Server is listening and ready to accept connections");
@@ -319,14 +325,12 @@ const startServer = async () => {
       console.error("❌ Server Error:", error);
       if (error.code === "EADDRINUSE") {
         console.error(
-          `Port ${PORT} is already in use. Please use a different port.`
+          `Port ${PORT_NUMBER} is already in use. Please use a different port.`
         );
       }
-      process.exit(1);
     });
   } catch (error) {
     console.error("Failed to start server:", error);
-    process.exit(1);
   }
 };
 

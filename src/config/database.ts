@@ -13,7 +13,9 @@ const connectDB = async (): Promise<void> => {
     console.log(`📊 Database: ${mongoose.connection.name}`);
   } catch (error) {
     console.error('❌ MongoDB Connection Error:', error);
-    process.exit(1);
+    console.error('⚠️  Server will continue without database connection');
+    console.error('⚠️  Please check MONGODB_URI environment variable');
+    // Don't exit - let server run without DB for debugging
   }
 };
 

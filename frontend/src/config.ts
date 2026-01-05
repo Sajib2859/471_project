@@ -2,14 +2,19 @@
 // This allows easy switching between development and production environments
 
 const getApiUrl = (): string => {
+  // Always prioritize environment variable if set
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+  
   // Check if we're in production (you can customize this logic)
   if (process.env.NODE_ENV === 'production') {
-    // In production, use the environment variable or fallback to relative path
-    return process.env.REACT_APP_API_URL || '/api';
+    // Production backend URL
+    return 'https://471-project-two.vercel.app/api';
   }
   
   // In development, use localhost with the configured port
-  return process.env.REACT_APP_API_URL || 'http://localhost:9371/api';
+  return 'http://localhost:9371/api';
 };
 
 export const API_BASE_URL = getApiUrl();
