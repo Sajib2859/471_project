@@ -10,7 +10,7 @@ const getApiUrl = (): string => {
   // Check if we're in production (you can customize this logic)
   if (process.env.NODE_ENV === 'production') {
     // Production backend URL
-    return 'https://471-project-two.vercel.app/api';
+    return 'https://471-project-seven.vercel.app/api';
   }
   
   // In development, use localhost with the configured port

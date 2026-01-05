@@ -4,7 +4,7 @@ import API_BASE_URL from '../config';
 
 const API_BASE = API_BASE_URL;
 
-interface CompanyAnalytics {
+interface ICompanyAnalytics {
   auctionsWon: any[];
   materialsAcquired: any[];
   transactionHistory: any[];
@@ -17,7 +17,7 @@ interface CompanyAnalytics {
 }
 
 const CompanyAnalytics: React.FC = () => {
-  const [analytics, setAnalytics] = useState<CompanyAnalytics | null>(null);
+  const [analytics, setAnalytics] = useState<ICompanyAnalytics | null>(null);
   const [loading, setLoading] = useState(true);
   const [dateFilter, setDateFilter] = useState({ startDate: '', endDate: '' });
   const [companyId, setCompanyId] = useState('');
