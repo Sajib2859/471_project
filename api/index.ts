@@ -1,16 +1,22 @@
 // Vercel serverless function entry point
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import app from '../src/server';
 import connectDB from '../src/config/database';
 
-// Middleware to ensure DB connection before handling requests
-const handler = async (req: Request, res: Response) => {
-  try {
-    await connectDB();
-  } catch (error) {
-    console.error('Failed to connect to database:', error);
-  }
-  return app(req, res);
-};
+// Connection state
+let isConnected = false;
 
-export default handler;
+// Middleware to ensure DB connection before each request
+app.use(async (req: Request, res: Response, next: NextFunction) => {
+  if (!isConnected) {
+    try {
+      await connectDB();
+      isConnected = true;
+    } catch (error) {
+      console.error('DB connection error:', error);
+    }
+  }
+  next();
+});
+
+export default app;
