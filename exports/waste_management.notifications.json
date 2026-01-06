@@ -1,0 +1,100 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000401"
+  },
+  "recipientId": {
+    "$oid": "000000000000000000000002"
+  },
+  "type": "auction_match",
+  "title": "Matching Auctions Found",
+  "message": "Found 2 auction(s) matching your requirement for plastic materials.",
+  "relatedId": {
+    "$oid": "000000000000000000000301"
+  },
+  "relatedType": "requirement",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.966Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000402"
+  },
+  "recipientId": {
+    "$oid": "000000000000000000000003"
+  },
+  "type": "auction_match",
+  "title": "New Glass Auction Available",
+  "message": "A new glass auction matching your requirements is now live.",
+  "relatedId": {
+    "$oid": "000000000000000000000302"
+  },
+  "relatedType": "requirement",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.966Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000403"
+  },
+  "recipientId": {
+    "$oid": "000000000000000000000002"
+  },
+  "type": "bid_update",
+  "title": "You've Been Outbid",
+  "message": "Another bidder has placed a higher bid on the Plastic Bottles Auction.",
+  "relatedId": {
+    "$oid": "000000000000000000000101"
+  },
+  "relatedType": "auction",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.966Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000404"
+  },
+  "recipientId": {
+    "$oid": "000000000000000000000003"
+  },
+  "type": "bid_update",
+  "title": "Your Bid is Leading",
+  "message": "Your bid of 1200 is currently the highest on Plastic Bottles Auction.",
+  "relatedId": {
+    "$oid": "000000000000000000000101"
+  },
+  "relatedType": "auction",
+  "isRead": true,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.966Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000405"
+  },
+  "recipientId": {
+    "$oid": "000000000000000000000002"
+  },
+  "type": "price_alert",
+  "title": "Price Alert: Paper Auction",
+  "message": "Paper auction price is within your budget range of 4000.",
+  "relatedId": {
+    "$oid": "000000000000000000000103"
+  },
+  "relatedType": "auction",
+  "isRead": false,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.966Z"
+  },
+  "__v": 0
+}]

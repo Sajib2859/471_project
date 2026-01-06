@@ -1,0 +1,33 @@
+[{
+  "_id": {
+    "$oid": "69374880581aa092a4847f38"
+  },
+  "userId": {
+    "$oid": "000000000000000000000004"
+  },
+  "wasteHubId": {
+    "$oid": "000000000000000000000501"
+  },
+  "wasteType": "plastic",
+  "amount": 10,
+  "description": "xyz",
+  "photoUrl": "",
+  "status": "verified",
+  "verificationDetails": {
+    "verifiedBy": {
+      "$oid": "000000000000000000000001"
+    },
+    "verifiedAt": {
+      "$date": "2025-12-08T21:53:51.808Z"
+    },
+    "creditAllocated": 25
+  },
+  "estimatedCredits": 25,
+  "createdAt": {
+    "$date": "2025-12-08T21:52:00.468Z"
+  },
+  "updatedAt": {
+    "$date": "2025-12-08T21:53:51.808Z"
+  },
+  "__v": 0
+}]

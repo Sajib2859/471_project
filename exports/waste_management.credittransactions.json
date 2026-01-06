@@ -1,0 +1,119 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000601"
+  },
+  "userId": {
+    "$oid": "000000000000000000000004"
+  },
+  "type": "earned",
+  "amount": 100,
+  "description": "Deposit validation reward - 10kg plastic",
+  "referenceType": "deposit",
+  "balanceAfter": 100,
+  "createdAt": {
+    "$date": "2025-11-01T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000602"
+  },
+  "userId": {
+    "$oid": "000000000000000000000004"
+  },
+  "type": "earned",
+  "amount": 150,
+  "description": "Deposit validation reward - 15kg glass",
+  "referenceType": "deposit",
+  "balanceAfter": 250,
+  "createdAt": {
+    "$date": "2025-11-05T14:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000603"
+  },
+  "userId": {
+    "$oid": "000000000000000000000004"
+  },
+  "type": "earned",
+  "amount": 250,
+  "description": "Deposit validation reward - 25kg paper",
+  "referenceType": "deposit",
+  "balanceAfter": 500,
+  "createdAt": {
+    "$date": "2025-11-10T11:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000604"
+  },
+  "userId": {
+    "$oid": "000000000000000000000002"
+  },
+  "type": "earned",
+  "amount": 500,
+  "description": "Campaign participation reward",
+  "referenceType": "campaign",
+  "balanceAfter": 500,
+  "createdAt": {
+    "$date": "2025-10-15T09:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000605"
+  },
+  "userId": {
+    "$oid": "000000000000000000000002"
+  },
+  "type": "earned",
+  "amount": 500,
+  "description": "Material collection reward",
+  "referenceType": "deposit",
+  "balanceAfter": 1000,
+  "createdAt": {
+    "$date": "2025-10-20T13:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000606"
+  },
+  "userId": {
+    "$oid": "000000000000000000000003"
+  },
+  "type": "earned",
+  "amount": 1000,
+  "description": "Bulk deposit validation - 100kg metal",
+  "referenceType": "deposit",
+  "balanceAfter": 1000,
+  "createdAt": {
+    "$date": "2025-10-25T10:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000607"
+  },
+  "userId": {
+    "$oid": "000000000000000000000003"
+  },
+  "type": "earned",
+  "amount": 1000,
+  "description": "Partnership reward program",
+  "referenceType": "partnership",
+  "balanceAfter": 2000,
+  "createdAt": {
+    "$date": "2025-11-01T15:00:00.000Z"
+  },
+  "__v": 0
+}]

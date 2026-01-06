@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000701"
+  },
+  "userId": {
+    "$oid": "000000000000000000000004"
+  },
+  "creditsRedeemed": 0,
+  "cashAmount": 0,
+  "conversionRate": 1,
+  "status": "completed",
+  "paymentMethod": "bank_transfer",
+  "paymentDetails": {
+    "accountNumber": "1234567890",
+    "accountName": "Regular User",
+    "bankName": "Example Bank"
+  },
+  "processedBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "processedAt": {
+    "$date": "2025-10-28T16:00:00.000Z"
+  },
+  "createdAt": {
+    "$date": "2025-10-25T10:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-28T16:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000702"
+  },
+  "userId": {
+    "$oid": "000000000000000000000002"
+  },
+  "creditsRedeemed": 0,
+  "cashAmount": 0,
+  "conversionRate": 1,
+  "status": "pending",
+  "paymentMethod": "mobile_banking",
+  "paymentDetails": {
+    "mobileNumber": "+880-1711-999888"
+  },
+  "createdAt": {
+    "$date": "2025-11-15T09:00:00.000Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-15T09:00:00.000Z"
+  },
+  "__v": 0
+}]

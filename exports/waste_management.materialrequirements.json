@@ -1,0 +1,124 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000301"
+  },
+  "companyId": {
+    "$oid": "000000000000000000000002"
+  },
+  "materialType": "plastic",
+  "quantity": 1000,
+  "unit": "kg",
+  "description": "Need high-quality PET plastic for bottle manufacturing. Must be clean and sorted.",
+  "maxPrice": 5000,
+  "urgency": "high",
+  "status": "active",
+  "preferredLocations": [
+    "Dhaka",
+    "Chittagong"
+  ],
+  "notificationPreferences": {
+    "auctionMatch": true,
+    "inventoryMatch": true,
+    "priceAlert": true
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000302"
+  },
+  "companyId": {
+    "$oid": "000000000000000000000003"
+  },
+  "materialType": "glass",
+  "quantity": 500,
+  "unit": "kg",
+  "description": "Looking for clear and colored glass bottles for recycling into new containers.",
+  "maxPrice": 3000,
+  "urgency": "medium",
+  "status": "active",
+  "preferredLocations": [
+    "Dhaka",
+    "Sylhet"
+  ],
+  "notificationPreferences": {
+    "auctionMatch": true,
+    "inventoryMatch": true,
+    "priceAlert": false
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000303"
+  },
+  "companyId": {
+    "$oid": "000000000000000000000002"
+  },
+  "materialType": "paper",
+  "quantity": 2000,
+  "unit": "kg",
+  "description": "Bulk paper and cardboard waste needed for paper manufacturing.",
+  "maxPrice": 4000,
+  "urgency": "low",
+  "status": "active",
+  "preferredLocations": [
+    "Dhaka"
+  ],
+  "notificationPreferences": {
+    "auctionMatch": true,
+    "inventoryMatch": false,
+    "priceAlert": true
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000304"
+  },
+  "companyId": {
+    "$oid": "000000000000000000000003"
+  },
+  "materialType": "metal",
+  "quantity": 800,
+  "unit": "kg",
+  "description": "Industrial grade aluminum and metal waste for smelting operations.",
+  "maxPrice": 10000,
+  "urgency": "high",
+  "status": "active",
+  "preferredLocations": [
+    "Dhaka",
+    "Chittagong",
+    "Sylhet"
+  ],
+  "notificationPreferences": {
+    "auctionMatch": true,
+    "inventoryMatch": true,
+    "priceAlert": true
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.963Z"
+  },
+  "__v": 0
+}]

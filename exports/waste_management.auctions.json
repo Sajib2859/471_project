@@ -1,0 +1,145 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000101"
+  },
+  "title": "Recycled Plastic Bottles Auction",
+  "description": "High quality PET plastic bottles ready for recycling. Clean and sorted.",
+  "materialType": "plastic",
+  "quantity": 500,
+  "unit": "kg",
+  "startingBid": 1000,
+  "currentBid": 1200,
+  "minimumCreditRequired": 100,
+  "minimumCashRequired": 500,
+  "startTime": {
+    "$date": "2025-11-20T10:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-11-25T18:00:00.000Z"
+  },
+  "status": "live",
+  "location": "Dhaka Hub",
+  "createdBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000102"
+  },
+  "title": "Glass Bottles Collection",
+  "description": "Assorted glass bottles from beverage industry. Various colors.",
+  "materialType": "glass",
+  "quantity": 200,
+  "unit": "kg",
+  "startingBid": 800,
+  "currentBid": 800,
+  "minimumCreditRequired": 50,
+  "minimumCashRequired": 300,
+  "startTime": {
+    "$date": "2025-11-22T10:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-11-28T18:00:00.000Z"
+  },
+  "status": "scheduled",
+  "location": "Chittagong Hub",
+  "createdBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000103"
+  },
+  "title": "Cardboard and Paper Waste",
+  "description": "Commercial grade cardboard and paper waste. Dry and clean.",
+  "materialType": "paper",
+  "quantity": 1000,
+  "unit": "kg",
+  "startingBid": 500,
+  "currentBid": 750,
+  "minimumCreditRequired": 30,
+  "minimumCashRequired": 200,
+  "startTime": {
+    "$date": "2025-11-18T10:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-11-24T18:00:00.000Z"
+  },
+  "status": "live",
+  "location": "Sylhet Hub",
+  "createdBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000104"
+  },
+  "title": "Metal Cans and Aluminum",
+  "description": "Crushed aluminum cans and metal containers. Industrial quality.",
+  "materialType": "metal",
+  "quantity": 300,
+  "unit": "kg",
+  "startingBid": 2000,
+  "currentBid": 2000,
+  "minimumCreditRequired": 200,
+  "minimumCashRequired": 1000,
+  "startTime": {
+    "$date": "2025-11-25T10:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-11-30T18:00:00.000Z"
+  },
+  "status": "scheduled",
+  "location": "Dhaka Hub",
+  "createdBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.960Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000105"
+  },
+  "title": "Electronic Waste Components",
+  "description": "Sorted e-waste including circuit boards and cables.",
+  "materialType": "electronic",
+  "quantity": 100,
+  "unit": "kg",
+  "startingBid": 3000,
+  "currentBid": 3500,
+  "minimumCreditRequired": 500,
+  "minimumCashRequired": 2000,
+  "startTime": {
+    "$date": "2025-11-15T10:00:00.000Z"
+  },
+  "endTime": {
+    "$date": "2025-11-20T18:00:00.000Z"
+  },
+  "status": "live",
+  "location": "Dhaka Hub",
+  "createdBy": {
+    "$oid": "000000000000000000000001"
+  },
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.960Z"
+  },
+  "__v": 0
+}]

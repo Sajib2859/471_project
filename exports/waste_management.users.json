@@ -1,0 +1,70 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000001"
+  },
+  "name": "Admin User",
+  "email": "admin@waste.com",
+  "role": "admin",
+  "creditBalance": 0,
+  "cashBalance": 0,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000002"
+  },
+  "name": "Company ABC Ltd",
+  "email": "company@abc.com",
+  "role": "company",
+  "creditBalance": 1000,
+  "cashBalance": 50000,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000003"
+  },
+  "name": "Green Industries",
+  "email": "green@industries.com",
+  "role": "company",
+  "creditBalance": 2000,
+  "cashBalance": 100000,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000004"
+  },
+  "name": "Regular User",
+  "email": "user@test.com",
+  "role": "user",
+  "creditBalance": 500,
+  "cashBalance": 10000,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.953Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000005"
+  },
+  "name": "John Doe",
+  "email": "john@example.com",
+  "role": "user",
+  "creditBalance": 300,
+  "cashBalance": 5000,
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.953Z"
+  },
+  "__v": 0
+}]

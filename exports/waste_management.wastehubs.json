@@ -1,0 +1,319 @@
+[{
+  "_id": {
+    "$oid": "000000000000000000000501"
+  },
+  "name": "Dhaka Central Waste Hub",
+  "location": {
+    "address": "123 Green Road, Dhanmondi",
+    "city": "Dhaka",
+    "coordinates": {
+      "latitude": 23.7461,
+      "longitude": 90.3742
+    }
+  },
+  "wasteTypes": [
+    "plastic",
+    "paper",
+    "metal",
+    "glass"
+  ],
+  "status": "open",
+  "operatingHours": {
+    "open": "08:00",
+    "close": "18:00"
+  },
+  "acceptedMaterials": [
+    {
+      "type": "plastic",
+      "pricePerKg": 20,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46fa"
+      }
+    },
+    {
+      "type": "paper",
+      "pricePerKg": 10,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46fb"
+      }
+    },
+    {
+      "type": "metal",
+      "pricePerKg": 50,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46fc"
+      }
+    },
+    {
+      "type": "glass",
+      "pricePerKg": 15,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46fd"
+      }
+    }
+  ],
+  "capacity": {
+    "current": 5000,
+    "maximum": 10000
+  },
+  "contactNumber": "+880-1711-111111",
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000502"
+  },
+  "name": "Chittagong Port Area Hub",
+  "location": {
+    "address": "45 Port Road, Agrabad",
+    "city": "Chittagong",
+    "coordinates": {
+      "latitude": 22.3569,
+      "longitude": 91.7832
+    }
+  },
+  "wasteTypes": [
+    "plastic",
+    "glass",
+    "electronic"
+  ],
+  "status": "open",
+  "operatingHours": {
+    "open": "09:00",
+    "close": "17:00"
+  },
+  "acceptedMaterials": [
+    {
+      "type": "plastic",
+      "pricePerKg": 22,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46fe"
+      }
+    },
+    {
+      "type": "glass",
+      "pricePerKg": 18,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a46ff"
+      }
+    },
+    {
+      "type": "electronic",
+      "pricePerKg": 100,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4700"
+      }
+    }
+  ],
+  "capacity": {
+    "current": 3000,
+    "maximum": 8000
+  },
+  "contactNumber": "+880-1711-222222",
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000503"
+  },
+  "name": "Sylhet Eco Waste Center",
+  "location": {
+    "address": "78 Zindabazar, Sylhet Sadar",
+    "city": "Sylhet",
+    "coordinates": {
+      "latitude": 24.8949,
+      "longitude": 91.8687
+    }
+  },
+  "wasteTypes": [
+    "paper",
+    "organic",
+    "textile"
+  ],
+  "status": "open",
+  "operatingHours": {
+    "open": "08:30",
+    "close": "16:30"
+  },
+  "acceptedMaterials": [
+    {
+      "type": "paper",
+      "pricePerKg": 12,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4701"
+      }
+    },
+    {
+      "type": "organic",
+      "pricePerKg": 5,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4702"
+      }
+    },
+    {
+      "type": "textile",
+      "pricePerKg": 8,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4703"
+      }
+    }
+  ],
+  "capacity": {
+    "current": 2000,
+    "maximum": 5000
+  },
+  "contactNumber": "+880-1711-333333",
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000504"
+  },
+  "name": "Mirpur Recycling Station",
+  "location": {
+    "address": "12 Mirpur Road, Section 10",
+    "city": "Dhaka",
+    "coordinates": {
+      "latitude": 23.8103,
+      "longitude": 90.3687
+    }
+  },
+  "wasteTypes": [
+    "plastic",
+    "metal",
+    "electronic",
+    "hazardous"
+  ],
+  "status": "maintenance",
+  "operatingHours": {
+    "open": "10:00",
+    "close": "19:00"
+  },
+  "acceptedMaterials": [
+    {
+      "type": "plastic",
+      "pricePerKg": 21,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4704"
+      }
+    },
+    {
+      "type": "metal",
+      "pricePerKg": 55,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4705"
+      }
+    },
+    {
+      "type": "electronic",
+      "pricePerKg": 120,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4706"
+      }
+    },
+    {
+      "type": "hazardous",
+      "pricePerKg": 30,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4707"
+      }
+    }
+  ],
+  "capacity": {
+    "current": 1500,
+    "maximum": 6000
+  },
+  "contactNumber": "+880-1711-444444",
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "000000000000000000000505"
+  },
+  "name": "Uttara Green Hub",
+  "location": {
+    "address": "Sector 7, Uttara Model Town",
+    "city": "Dhaka",
+    "coordinates": {
+      "latitude": 23.8759,
+      "longitude": 90.3795
+    }
+  },
+  "wasteTypes": [
+    "plastic",
+    "paper",
+    "glass",
+    "organic"
+  ],
+  "status": "closed",
+  "operatingHours": {
+    "open": "07:00",
+    "close": "20:00"
+  },
+  "acceptedMaterials": [
+    {
+      "type": "plastic",
+      "pricePerKg": 19,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4708"
+      }
+    },
+    {
+      "type": "paper",
+      "pricePerKg": 11,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a4709"
+      }
+    },
+    {
+      "type": "glass",
+      "pricePerKg": 16,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a470a"
+      }
+    },
+    {
+      "type": "organic",
+      "pricePerKg": 6,
+      "_id": {
+        "$oid": "695c3bba9dcd9710505a470b"
+      }
+    }
+  ],
+  "capacity": {
+    "current": 4000,
+    "maximum": 9000
+  },
+  "contactNumber": "+880-1711-555555",
+  "createdAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "updatedAt": {
+    "$date": "2026-01-05T22:31:22.967Z"
+  },
+  "__v": 0
+}]
