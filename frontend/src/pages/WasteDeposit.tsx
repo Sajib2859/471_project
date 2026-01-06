@@ -57,8 +57,8 @@ const WasteDeposit: React.FC = () => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      setCurrentUserId(user.id);
-      setFormData(prev => ({ ...prev, userId: user.id }));
+      setCurrentUserId(user._id || user.id);
+      setFormData(prev => ({ ...prev, userId: user._id || user.id }));
     }
 
     const loadData = async () => {

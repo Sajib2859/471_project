@@ -18,6 +18,7 @@ import roleRoutes from "./routes/roleRoutes";
 import ratingRoutes from "./routes/ratingRoutes";
 import announcementRoutes from "./routes/announcementRoutes";
 import profileRoutes from "./routes/profileRoutes";
+import debugRoutes from "./routes/debugRoutes";
 
 // Load environment variables
 dotenv.config();
@@ -78,6 +79,7 @@ app.use("/api", announcementRoutes);
 app.use("/api", profileRoutes);
 app.use("/api", notificationRoutes);
 app.use("/api", analyticsRoutes);
+app.use("/api", debugRoutes);
 app.use("/api", roleRoutes);
 
 // API Documentation route

@@ -61,8 +61,14 @@ const Auctions: React.FC = () => {
       const response = await axios.post(`${API_BASE}/auctions/${auctionId}/check-eligibility`, {
         userId: COMPANY_ID
       });
-      alert(response.data.message);
-      return response.data.eligible;
+      const { eligible, user, requirements, reasons } = response.data.data;
+      
+      if (eligible) {
+        alert(`✅ You are eligible to bid!\n\nYour Balance:\n💰 Cash: ${user.cashBalance} tk\n⭐ Credits: ${user.creditBalance}\n\nRequired:\n💰 Cash: ${requirements.minimumCash} tk\n⭐ Credits: ${requirements.minimumCredit}`);
+      } else {
+        alert(`❌ Not eligible to bid\n\n${reasons.join('\n')}`);
+      }
+      return eligible;
     } catch (error: any) {
       alert(error.response?.data?.message || 'Error checking eligibility');
       return false;

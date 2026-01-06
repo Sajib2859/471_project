@@ -29,8 +29,8 @@ const Notifications: React.FC = () => {
     const userStr = localStorage.getItem('user');
     if (userStr) {
       const user = JSON.parse(userStr);
-      setUserId(user.id);
-      fetchNotifications(user.id);
+      setUserId(user._id || user.id);
+      fetchNotifications(user._id || user.id);
     } else {
       setLoading(false);
     }

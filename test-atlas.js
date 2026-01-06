@@ -9,9 +9,13 @@ mongoose.connect(uri, {
   console.log('✅ Successfully connected to MongoDB Atlas!');
   console.log('Database:', mongoose.connection.name);
   
-  // Check wastehubs specifically
-  const wastehubs = await mongoose.connection.db.collection('wastehubs').find({}).limit(5).toArray();
-  console.log('\nWaste Hubs:', JSON.stringify(wastehubs, null, 2));
+  const collections = await mongoose.connection.db.listCollections().toArray();
+  console.log('\nCollections:');
+  
+  for (const col of collections) {
+    const count = await mongoose.connection.db.collection(col.name).countDocuments();
+    console.log(`  ${col.name}: ${count} documents`);
+  }
   
   process.exit(0);
 })

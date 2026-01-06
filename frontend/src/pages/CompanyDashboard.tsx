@@ -52,7 +52,9 @@ const CompanyDashboard: React.FC = () => {
         axios.get(`${API_BASE}/material-requirements`),
         axios.get(`${API_BASE}/companies/${COMPANY_ID}/notifications`)
       ]);
-      setRequirements(reqRes.data.data.filter((r: any) => r.companyId === COMPANY_ID));
+      setRequirements(reqRes.data.data.filter((r: any) => 
+        r.companyId === COMPANY_ID || r.companyId?._id === COMPANY_ID
+      ));
       setNotifications(notifRes.data.data);
     } catch (error) {
       console.error('Error fetching data:', error);

@@ -17,6 +17,7 @@ interface WasteReport {
   status: string;
   reportedBy: any;
   upvotes: any[];
+  comments: any[];
   createdAt: string;
 }
 
@@ -71,7 +72,7 @@ const WasteReports: React.FC = () => {
         estimatedQuantity: newReport.estimatedQuantity
           ? parseFloat(newReport.estimatedQuantity)
           : undefined,
-        reportedBy: user._id,
+        reportedBy: user.id || user._id,
       };
 
       await axios.post(`${API_URL}/waste-reports`, reportData);
@@ -99,7 +100,7 @@ const WasteReports: React.FC = () => {
     }
     try {
       await axios.post(`${API_URL}/waste-reports/${reportId}/upvote`, {
-        userId: user._id,
+        userId: user.id || user._id,
       });
       alert("Report upvoted!");
       fetchReports();
@@ -109,7 +110,7 @@ const WasteReports: React.FC = () => {
   };
 
   const hasUpvoted = (report: WasteReport) => {
-    return report.upvotes.some((u: any) => u === user?._id || u._id === user?._id);
+    return report.upvotes.some((u: any) => u === user?.id || u === user?._id || u._id === user?.id || u._id === user?._id);
   };
 
   const getSeverityColor = (severity: string) => {

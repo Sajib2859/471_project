@@ -78,7 +78,7 @@ const Blogs: React.FC = () => {
       const blogData = {
         ...newBlog,
         tags: newBlog.tags.split(",").map((t) => t.trim()),
-        author: user._id,
+        author: user.id || user._id, // Support both id and _id
       };
 
       await axios.post(`${API_URL}/blogs`, blogData);
@@ -105,7 +105,7 @@ const Blogs: React.FC = () => {
     }
     try {
       await axios.post(`${API_URL}/blogs/${blogId}/like`, {
-        userId: user._id,
+        userId: user.id || user._id,
       });
       fetchBlogs();
       if (selectedBlog?._id === blogId) {
@@ -128,7 +128,7 @@ const Blogs: React.FC = () => {
 
     try {
       await axios.post(`${API_URL}/blogs/${blogId}/comment`, {
-        userId: user._id,
+        userId: user.id || user._id,
         content: commentText,
       });
       setCommentText("");

@@ -67,7 +67,7 @@ const Campaigns: React.FC = () => {
 
   const fetchUserCampaigns = async () => {
     try {
-      const response = await axios.get(`${API_URL}/users/${user._id}/campaigns`);
+      const response = await axios.get(`${API_URL}/users/${user.id || user._id}/campaigns`);
       setUserCampaigns(response.data.data);
     } catch (error) {
       console.error("Error fetching user campaigns:", error);
@@ -83,7 +83,7 @@ const Campaigns: React.FC = () => {
           ? parseInt(newCampaign.maxParticipants)
           : undefined,
         goals: newCampaign.goals.split(",").map((g) => g.trim()),
-        createdBy: user._id,
+        createdBy: user._id || user.id,
       };
 
       await axios.post(`${API_URL}/campaigns`, campaignData);
@@ -112,7 +112,7 @@ const Campaigns: React.FC = () => {
     }
     try {
       await axios.post(`${API_URL}/campaigns/${campaignId}/volunteer`, {
-        userId: user._id,
+        userId: user._id || user.id,
       });
       alert("Successfully volunteered for campaign!");
       fetchCampaigns();
@@ -129,7 +129,7 @@ const Campaigns: React.FC = () => {
     }
     try {
       await axios.post(`${API_URL}/campaigns/${campaignId}/follow`, {
-        userId: user._id,
+        userId: user.id || user._id,
       });
       alert("Successfully following campaign!");
       fetchCampaigns();

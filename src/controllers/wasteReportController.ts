@@ -492,6 +492,15 @@ export const upvoteWasteReport = async (
       return;
     }
 
+    // Validate userId format
+    if (!Types.ObjectId.isValid(userId)) {
+      res.status(400).json({
+        success: false,
+        message: "Invalid user ID format",
+      });
+      return;
+    }
+
     const report = await WasteReport.findById(id);
 
     if (!report) {
@@ -500,6 +509,11 @@ export const upvoteWasteReport = async (
         message: "Waste report not found",
       });
       return;
+    }
+
+    // Initialize upvotes array if it doesn't exist
+    if (!report.upvotes) {
+      report.upvotes = [];
     }
 
     const userObjectId = new Types.ObjectId(userId);

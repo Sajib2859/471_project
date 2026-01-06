@@ -34,7 +34,7 @@ const UserProfile: React.FC = () => {
   const [uploading, setUploading] = useState(false);
 
   const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
-  const userId = currentUser.id;
+  const userId = currentUser._id || currentUser.id;
 
   useEffect(() => {
     if (userId) {
