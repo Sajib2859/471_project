@@ -303,11 +303,14 @@ app.use((err: any, req: Request, res: Response, next: any) => {
 // Start server with database connection
 const startServer = async () => {
   try {
-    // Try to connect to database (but don't crash if it fails)
-    try {
-      await connectDB();
-    } catch (error) {
-      console.error('Database connection failed, but server will continue');
+    // For serverless (Vercel), connection is handled per-request
+    // For local development, connect here
+    if (process.env.NODE_ENV !== 'production') {
+      try {
+        await connectDB();
+      } catch (error) {
+        console.error('Database connection failed, but server will continue');
+      }
     }
 
     // Start the server regardless of DB connection

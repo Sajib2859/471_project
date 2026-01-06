@@ -15,7 +15,9 @@ router.get('/db-test', async (req: Request, res: Response) => {
       mongooseStateCode: status,
       connected: status === 1,
       dbName: mongoose.connection.name,
-      host: mongoose.connection.host
+      host: mongoose.connection.host,
+      envVarSet: !!process.env.MONGODB_URI,
+      envVarLength: process.env.MONGODB_URI?.length || 0
     });
   } catch (error: any) {
     res.status(500).json({
